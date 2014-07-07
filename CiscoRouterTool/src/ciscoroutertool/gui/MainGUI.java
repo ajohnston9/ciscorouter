@@ -83,6 +83,11 @@ public class MainGUI extends javax.swing.JFrame {
         });
         currentConfTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(currentConfTable);
+        if (currentConfTable.getColumnModel().getColumnCount() > 0) {
+            currentConfTable.getColumnModel().getColumn(0).setMinWidth(80);
+            currentConfTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+            currentConfTable.getColumnModel().getColumn(0).setMaxWidth(80);
+        }
 
         lblConfTable.setText("Current Configuration: ");
 
