@@ -92,6 +92,11 @@ public class MainGUI extends javax.swing.JFrame {
         lblConfTable.setText("Current Configuration: ");
 
         btnAddDevice.setText("Add New Device...");
+        btnAddDevice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddDeviceActionPerformed(evt);
+            }
+        });
 
         btnRunScan.setText("Run Scan...");
 
@@ -211,6 +216,11 @@ public class MainGUI extends javax.swing.JFrame {
         NewDeviceDialog device = new NewDeviceDialog();
         device.setVisible(true);
     }//GEN-LAST:event_menuAddDeviceActionPerformed
+
+    private void btnAddDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDeviceActionPerformed
+        NewDeviceDialog device = new NewDeviceDialog();
+        device.setVisible(true);
+    }//GEN-LAST:event_btnAddDeviceActionPerformed
 
     /**
      * @param args the command line arguments

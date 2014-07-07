@@ -191,6 +191,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Add New Device..."/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddDeviceActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnRunScan">
       <Properties>
