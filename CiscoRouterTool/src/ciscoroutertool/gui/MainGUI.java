@@ -1,7 +1,9 @@
 package ciscoroutertool.gui;
 
 import ciscoroutertool.settings.SettingsManager;
+import ciscoroutertool.utils.Host;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -18,6 +20,8 @@ public class MainGUI extends javax.swing.JFrame {
     private final  FileNameExtensionFilter filter  = new FileNameExtensionFilter("Configuration File", "xml");
     private final  JFileChooser fc                 = new JFileChooser();
     public  static SettingsManager settingsManager = new SettingsManager();
+    
+    private static ArrayList<Host> hosts;
     
     /**
      * Creates new form MainGUI
@@ -237,6 +241,11 @@ public class MainGUI extends javax.swing.JFrame {
                 new MainGUI().setVisible(true);
             }
         });
+    }
+    
+    public static void updateTable(Host h) {
+        //TODO: IF host < 4, then update lowest row
+        //else add a row 
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDevice;
