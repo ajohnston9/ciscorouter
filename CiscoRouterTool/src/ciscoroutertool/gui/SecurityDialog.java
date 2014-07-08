@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ciscoroutertool.gui;
 
 /**
- *
- * @author Andrew
+ * Allows a user to set the username and password for the application
+ * @version 0.01ALPHA
+ * @author Andrew Johnston
  */
 public class SecurityDialog extends javax.swing.JFrame {
 

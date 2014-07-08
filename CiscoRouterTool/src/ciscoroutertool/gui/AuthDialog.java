@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ciscoroutertool.gui;
 
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author Andrew
+ * The dialog that forces users to log in to the application
+ * @version 0.01ALPHA
+ * @author Andrew Johnston
  */
 public class AuthDialog extends javax.swing.JFrame {
 
