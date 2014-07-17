@@ -12,7 +12,7 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 /**
- *
+ * Parses rule definitions and returns a list of rules to the system
  * @author Andrew Johnston
  */
 public class RuleParser {
@@ -33,7 +33,7 @@ public class RuleParser {
         return rules;
     }
     
-    public static Rule getRuleFromFile(File f) {
+    private static Rule getRuleFromFile(File f) {
         Rule r = null;
         try {
             Builder parser = new Builder();
