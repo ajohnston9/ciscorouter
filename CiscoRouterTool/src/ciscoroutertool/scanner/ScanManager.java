@@ -43,7 +43,7 @@ public class ScanManager implements Runnable {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
             List<Future<HostReport>> reports;
-            ArrayList<Scanner> scanners = new ArrayList<Scanner>();
+            ArrayList<Scanner> scanners = new ArrayList<>();
             for (Host h : hosts) {
                 Scanner s = new Scanner(h);
                 scanners.add(s);
