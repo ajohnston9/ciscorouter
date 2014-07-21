@@ -15,23 +15,26 @@ import java.net.InetAddress;
 public class Host {
 
     private InetAddress ip_addr;
-    private int         connectMethod = 1;
+    private String      user;
+    private String      pass;
     
-    public static final int SSH_CONNECTION    = 1;
-    public static final int SNMP_CONNECTION   = 2;
-    public static final int TELNET_CONNECTION = 3;
     
-    public Host(InetAddress ip, int method) {
+    public Host(InetAddress ip, String _user, String _pass) {
         ip_addr       = ip;
-        connectMethod = method;
+        user = _user;
+        pass = _pass;
     }
     
     public InetAddress getAddress() {
         return ip_addr;
     }
     
-    public int getConnectionMethod() {
-        return connectMethod;
+    public String getUser() {
+        return user;
+    }
+    
+    public String getPass() {
+        return pass;
     }
 
 }
