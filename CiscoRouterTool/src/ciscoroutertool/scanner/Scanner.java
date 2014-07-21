@@ -6,6 +6,7 @@
 package ciscoroutertool.scanner;
 
 import ciscoroutertool.utils.Host;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 /**
@@ -15,6 +16,10 @@ import java.util.concurrent.Callable;
  */
 public class Scanner implements Callable<HostReport> {
 
+    public static ArrayList<Rule> rules;
+    
+    private ArrayList<Rule> matched;
+    
     private Host host;
     public Scanner(Host h) {
         host = h;

@@ -29,6 +29,8 @@ public class ScanManager implements Runnable {
     public ScanManager(ArrayList<Host> _hosts) {
         hosts = _hosts;
         rules = RuleParser.getRules();
+        //Give the rules to the scanner class
+        Scanner.rules = rules;
     }
 
     /**
