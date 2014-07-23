@@ -16,6 +16,10 @@ public class RouterInterfaceManager {
     public static ArrayList<RouterInterface> getInterfaces(ArrayList<String> lines) {
         ArrayList<RouterInterface> interfaces = new ArrayList<>();
         int current = 0;
+        /**
+         * FIXME: What about global settings defined before/after interface
+         * definitions?
+         */
         interfaces.add(new RouterInterface());
         for (String line : lines) {
             //If it's not a new interface
@@ -26,7 +30,7 @@ public class RouterInterfaceManager {
             interfaces.add(current, new RouterInterface());
             
         }
-        throw new UnsupportedOperationException("Not supported yet!");
+        return interfaces;
     }
     
 }

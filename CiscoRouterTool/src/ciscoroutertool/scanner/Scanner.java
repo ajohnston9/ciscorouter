@@ -8,13 +8,17 @@ package ciscoroutertool.scanner;
 import ciscoroutertool.utils.Host;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Runs the scan for a host and holds the results
@@ -39,29 +43,52 @@ public class Scanner implements Callable<HostReport> {
 
     @Override
     public HostReport call() throws Exception {
-        //SSH into each host
-        //get all configuration information
-        //get objects of active configurations
-        //run all rules on each active configuration
-        //if rule successful, add to report
-        //add host object to report
-        //return report
-        JSch jsch = new JSch();
-        Session session = jsch.getSession(
-                host.getUser(), 
-                host.getAddress().getHostAddress(),
-                SSH_PORT);
-        session.setPassword(host.getPass());
-        session.connect();
-        //Run the command that gets the config
-        ChannelExec exec = (ChannelExec) session.openChannel("exec");
-        InputStream in = exec.getInputStream();
-        exec.setCommand(GET_ALL_CONFIG);
-        exec.connect();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                
-        
-        throw new UnsupportedOperationException("Not supported yet."); 
+        BufferedReader reader = getConfigFile();
+        String line = null;
+        ArrayList<String> lines = new ArrayList<>();
+        while ((line = reader.readLine()) != null) {
+            lines.add(line);
+        }
+        ArrayList<RouterInterface> interfaces = 
+                RouterInterfaceManager.getInterfaces(lines);
+        HostReport report = getHostReport(interfaces);
+        return report;
+    }
+    
+    private BufferedReader getConfigFile() {
+        InputStream in = null;
+        try {
+            JSch jsch = new JSch();
+            Session session = jsch.getSession(
+                    host.getUser(),
+                    host.getAddress().getHostAddress(),
+                    SSH_PORT);
+            session.setPassword(host.getPass());
+            session.connect();
+            //Run the command that gets the config
+            ChannelExec exec = (ChannelExec) session.openChannel("exec");
+            in = exec.getInputStream();
+            exec.setCommand(GET_ALL_CONFIG);
+            exec.connect();         
+        } catch (JSchException | IOException ex) {
+            Logger.getLogger(Scanner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new BufferedReader(new InputStreamReader(in));
     }
 
+    private HostReport getHostReport(ArrayList<RouterInterface> interfaces) {
+        HostReport report = new HostReport(host);
+        for (RouterInterface iface : interfaces) {
+            ArrayList<String> lines = iface.getLines();
+            for (String line : lines) {
+                //Check each rule against each line
+                for (Rule r : rules) {
+                    if (r.matchesRule(line)) {
+                        report.addMatchedRule(r);
+                    }
+                }
+            }
+        }
+        return report;
+    }
 }
