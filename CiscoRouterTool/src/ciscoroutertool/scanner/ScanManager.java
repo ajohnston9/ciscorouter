@@ -5,9 +5,12 @@
 
 package ciscoroutertool.scanner;
 
+import ciscoroutertool.rules.Rule;
+import ciscoroutertool.rules.RuleParser;
 import ciscoroutertool.utils.Host;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -42,14 +45,20 @@ public class ScanManager implements Runnable {
     public void run() {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
-            List<Future<HostReport>> reports;
+            List<Future<HostReport>> futureReports;
+            ArrayList<HostReport> reports = new ArrayList<>();
             ArrayList<Scanner> scanners = new ArrayList<>();
             for (Host h : hosts) {
                 Scanner s = new Scanner(h);
                 scanners.add(s);
             }
-            reports = executor.invokeAll(scanners);
+            futureReports = executor.invokeAll(scanners);
+            for (Future<HostReport> fReport : futureReports) {
+                reports.add(fReport.get());
+            }
         } catch (InterruptedException ex) {
+            Logger.getLogger(ScanManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
             Logger.getLogger(ScanManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         

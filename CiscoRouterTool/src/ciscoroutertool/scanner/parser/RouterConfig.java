@@ -1,4 +1,4 @@
-package ciscoroutertool.scanner;
+package ciscoroutertool.scanner.parser;
 
 import java.util.ArrayList;
 

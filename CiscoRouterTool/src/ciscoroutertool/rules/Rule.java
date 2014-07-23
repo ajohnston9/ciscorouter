@@ -1,4 +1,4 @@
-package ciscoroutertool.scanner;
+package ciscoroutertool.rules;
 
 /**
  * Holds the rules that config files are scanned against

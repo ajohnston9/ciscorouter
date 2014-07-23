@@ -1,4 +1,4 @@
-package ciscoroutertool.scanner;
+package ciscoroutertool.rules;
 
 import java.io.File;
 import java.io.IOException;

@@ -6,6 +6,7 @@
 
 package ciscoroutertool.scanner;
 
+import ciscoroutertool.rules.Rule;
 import ciscoroutertool.utils.Host;
 import java.util.ArrayList;
 import java.util.HashSet;

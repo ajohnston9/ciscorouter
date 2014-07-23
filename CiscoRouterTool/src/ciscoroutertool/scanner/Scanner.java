@@ -5,6 +5,9 @@
 
 package ciscoroutertool.scanner;
 
+import ciscoroutertool.rules.Rule;
+import ciscoroutertool.scanner.parser.RouterInterfaceManager;
+import ciscoroutertool.scanner.parser.RouterInterface;
 import ciscoroutertool.utils.Host;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -49,6 +52,9 @@ public class Scanner implements Callable<HostReport> {
         while ((line = reader.readLine()) != null) {
             lines.add(line);
         }
+        /**
+         * TODO: Fix so that it will have Settings object
+         */
         ArrayList<RouterInterface> interfaces = 
                 RouterInterfaceManager.getInterfaces(lines);
         HostReport report = getHostReport(interfaces);

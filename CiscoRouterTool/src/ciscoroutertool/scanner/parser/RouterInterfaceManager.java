@@ -1,5 +1,6 @@
-package ciscoroutertool.scanner;
+package ciscoroutertool.scanner.parser;
 
+import ciscoroutertool.scanner.parser.RouterInterface;
 import java.util.ArrayList;
 
 /**
