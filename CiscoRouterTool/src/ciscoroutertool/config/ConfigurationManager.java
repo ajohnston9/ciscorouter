@@ -7,7 +7,12 @@ package ciscoroutertool.config;
 
 import ciscoroutertool.utils.Host;
 import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import nu.xom.*;
 
 /**
  * Manages the Device Configurations. This is separate from Application Settings
@@ -20,8 +25,29 @@ public class ConfigurationManager {
     
     public ConfigurationManager(File config) {
         //TODO: Write Constructor for ConfigurationManager
-        //Open file with XOM
-        //Read in values
+        hosts = parseConfig(config);
+    }
+    
+    private ArrayList<Host> parseConfig(File config) {
+        ArrayList<Host> hosts = new ArrayList<>();
+        try {
+            Builder parser = new Builder();
+            Document doc = parser.build(config);
+            Element root = doc.getRootElement();
+            Elements eHosts = root.getChildElements("Host");
+            for (int i = 0; i < eHosts.size(); i++) {
+                String ip, user, pass;
+                Element host = eHosts.get(i);
+                ip   = host.getFirstChildElement("IP").getValue();
+                user = host.getFirstChildElement("Username").getValue();
+                pass = host.getFirstChildElement("Password").getValue();
+                hosts.add(new Host(InetAddress.getByName(ip), user, pass));
+            }
+            
+        } catch (ParsingException | IOException ex) {
+            Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return hosts;
     }
     
     public ArrayList<Host> getAllHosts() {

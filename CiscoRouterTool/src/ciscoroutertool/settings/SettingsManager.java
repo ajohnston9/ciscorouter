@@ -45,7 +45,7 @@ public class SettingsManager {
     public boolean checkAuth(String _username, String _password) {
         boolean isCorrectUsername = false;
         boolean isCorrectPassword = false;
-        if (username == _username) {
+        if (username.compareTo(_username) == 0) {
             isCorrectUsername = true;
         }
         try {

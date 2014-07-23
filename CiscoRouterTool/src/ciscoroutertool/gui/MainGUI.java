@@ -19,7 +19,7 @@ public class MainGUI extends javax.swing.JFrame {
 
     private final  FileNameExtensionFilter filter  = new FileNameExtensionFilter("Configuration File", "xml");
     private final  JFileChooser fc                 = new JFileChooser();
-    public  static SettingsManager settingsManager = new SettingsManager();
+    public  final static SettingsManager settingsManager = new SettingsManager();
     
     private static ArrayList<Host> hosts;
     

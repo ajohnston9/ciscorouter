@@ -109,7 +109,9 @@ public class AuthDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        if (MainGUI.settingsManager.checkAuth(null, null)) {
+        String username = fieldUsername.getText().trim();
+        String password = new String(fieldPassword.getPassword());
+        if (MainGUI.settingsManager.checkAuth(username, password)) {
             this.setVisible(false);
         }
         else {
