@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @version 0.01ALPHA
  * @author Andrew Johnston
  */
-public class ScanManager implements Runnable {
+public class ScanManager {
 
     private ArrayList<Rule> rules;
     private ArrayList<Host> hosts;
@@ -41,8 +41,8 @@ public class ScanManager implements Runnable {
      * thread and then run the "Please wait..." box, turning it off when we
      * have results.
      */
-    @Override
-    public void run() {
+    
+    public FullReport run() {
         try {
             ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
             List<Future<HostReport>> futureReports;
@@ -56,12 +56,10 @@ public class ScanManager implements Runnable {
             for (Future<HostReport> fReport : futureReports) {
                 reports.add(fReport.get());
             }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ScanManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(ScanManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        throw new UnsupportedOperationException("Not finished yet.");
     }
 
 }

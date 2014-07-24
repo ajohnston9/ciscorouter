@@ -7,8 +7,7 @@
 package ciscoroutertool.gui;
 
 import ciscoroutertool.scanner.FullReport;
-import ciscoroutertool.utils.Host;
-import java.util.ArrayList;
+import ciscoroutertool.scanner.ScanManager;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,17 +20,18 @@ import javax.swing.SwingWorker;
  */
 public class ScanLauncher extends SwingWorker<FullReport, Object> {
 
-    private ArrayList<Host> hosts;
     private MainGUI parent;
+    private ScanManager manager;
     
-    public ScanLauncher(MainGUI parent, ArrayList<Host> hosts) {
+    public ScanLauncher(MainGUI parent, ScanManager manager) {
         this.parent = parent;
-        this.hosts = hosts;
+        this.manager = manager;
     }
     
     @Override
     protected FullReport doInBackground() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        parent.scanning.setVisible(true);
+        return manager.run();
     }
     
     @Override

@@ -238,8 +238,8 @@ public class MainGUI extends javax.swing.JFrame {
         }
         scanning.setVisible(true);
         ScanManager manager = new ScanManager(hosts);
-        Thread scanManager = new Thread(manager);
-        scanManager.start();
+        ScanLauncher launcher = new ScanLauncher(this, manager);
+        launcher.execute();
         
     }//GEN-LAST:event_btnRunScanActionPerformed
     
