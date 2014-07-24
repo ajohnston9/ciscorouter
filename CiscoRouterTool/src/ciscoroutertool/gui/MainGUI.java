@@ -1,5 +1,7 @@
 package ciscoroutertool.gui;
 
+import ciscoroutertool.scanner.FullReport;
+import ciscoroutertool.scanner.ScanManager;
 import ciscoroutertool.settings.SettingsManager;
 import ciscoroutertool.utils.Host;
 import java.io.File;
@@ -17,11 +19,12 @@ public class MainGUI extends javax.swing.JFrame {
     //Default Serial ID
     private static final long serialVersionUID = 1L;
 
-    private final  FileNameExtensionFilter filter  = new FileNameExtensionFilter("Configuration File", "xml");
-    private final  JFileChooser fc                 = new JFileChooser();
+    private final  FileNameExtensionFilter filter        = new FileNameExtensionFilter("Configuration File", "xml");
+    private final  JFileChooser fc                       = new JFileChooser();
     public  final static SettingsManager settingsManager = new SettingsManager();
+    public final ScanningDialog scanning                = new ScanningDialog();
     
-    private static ArrayList<Host> hosts;
+    private static ArrayList<Host> hosts = new ArrayList<>();
     
     /**
      * Creates new form MainGUI
@@ -99,6 +102,11 @@ public class MainGUI extends javax.swing.JFrame {
         });
 
         btnRunScan.setText("Run Scan...");
+        btnRunScan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRunScanActionPerformed(evt);
+            }
+        });
 
         fileMenu.setText("File");
 
@@ -222,6 +230,24 @@ public class MainGUI extends javax.swing.JFrame {
         device.setVisible(true);
     }//GEN-LAST:event_btnAddDeviceActionPerformed
 
+    private void btnRunScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunScanActionPerformed
+        System.out.println(hosts.size());
+        if (hosts.size() < 1) {
+            JOptionPane.showMessageDialog(this, "Please enter at least one host.");
+            return;
+        }
+        scanning.setVisible(true);
+        ScanManager manager = new ScanManager(hosts);
+        Thread scanManager = new Thread(manager);
+        scanManager.start();
+        
+    }//GEN-LAST:event_btnRunScanActionPerformed
+    
+    public void displayReport(FullReport report) {
+        OutputReview output = new OutputReview(report);
+        output.setVisible(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
