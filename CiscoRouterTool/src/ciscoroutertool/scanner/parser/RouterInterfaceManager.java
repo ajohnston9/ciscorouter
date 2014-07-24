@@ -20,6 +20,7 @@ public class RouterInterfaceManager {
         /**
          * FIXME: What about global settings defined before/after interface
          * definitions?
+         * NOTE: Must check 
          */
         interfaces.add(new RouterInterface());
         for (String line : lines) {
