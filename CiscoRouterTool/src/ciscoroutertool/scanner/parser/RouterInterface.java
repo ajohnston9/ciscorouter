@@ -6,12 +6,28 @@ import java.util.ArrayList;
  *
  * @author andrew
  */
-public class RouterInterface {
+public class RouterInterface extends RouterSetting{
  
     private ArrayList<String> lines;
+    private String ifaceName;
     
     public RouterInterface() {
         lines = new ArrayList<>();
+        ifaceName = null;
+    }
+    
+    public RouterInterface(String name) {
+        super(); //Call default
+        ifaceName = name;
+        lines = new ArrayList<>();
+    }
+    
+    public void setName(String name) {
+        ifaceName = name;
+    }
+    
+    public String getName() {
+        return ifaceName;
     }
     
     public void addLine(String l) {
