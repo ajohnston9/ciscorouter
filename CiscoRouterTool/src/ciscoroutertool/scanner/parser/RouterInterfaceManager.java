@@ -14,6 +14,38 @@ public class RouterInterfaceManager {
         
     }
     
+    public static ArrayList<String> getActiveConfig(ArrayList<String> lines) {
+        ArrayList<String> activeLines = new ArrayList<>();
+        ArrayList<RouterInterface> interfaces = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            //Ignore comments
+            if (line.matches("(\\s+)?!(.*)?")) {
+                continue;
+            }
+            //Put interfaces into its own thing
+            if (line.matches("^interface\\s(.*)")) {
+                RouterInterface iface = new RouterInterface(line);
+                String nline = null;
+                i++; //Increment counter
+                while ((nline = lines.get(i)) != null && !nline.matches("!") 
+                        && !nline.matches("^interface\\s(.*)")) {
+                    iface.addLine(nline);
+                    i++;
+                }
+                interfaces.add(iface);
+            }
+            //Its not an interface, process normally
+            activeLines.add(line);
+        }
+        for (RouterInterface iface : interfaces) {
+            if (!iface.isShutdown()) {
+                activeLines.addAll(iface.getLines());
+            }
+        }
+        return activeLines;
+    }
+    
     public static ArrayList<RouterInterface> getInterfaces(ArrayList<String> lines) {
         ArrayList<RouterInterface> interfaces = new ArrayList<>();
         int current = 0;

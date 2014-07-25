@@ -24,7 +24,7 @@ public class MainGUI extends javax.swing.JFrame {
     public  final static SettingsManager settingsManager = new SettingsManager();
     public final ScanningDialog scanning                = new ScanningDialog();
     
-    private static ArrayList<Host> hosts = new ArrayList<>();
+    private static final ArrayList<Host> hosts = new ArrayList<>();
     
     /**
      * Creates new form MainGUI

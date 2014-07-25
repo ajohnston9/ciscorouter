@@ -38,4 +38,13 @@ public class RouterInterface extends RouterSetting{
         return lines;
     }
     
+    public boolean isShutdown() {
+        for (String line : lines) {
+            if (line.matches("(\\s)shutdown")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

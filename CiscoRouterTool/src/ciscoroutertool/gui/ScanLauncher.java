@@ -20,8 +20,8 @@ import javax.swing.SwingWorker;
  */
 public class ScanLauncher extends SwingWorker<FullReport, Object> {
 
-    private MainGUI parent;
-    private ScanManager manager;
+    private final MainGUI parent;
+    private final ScanManager manager;
     
     public ScanLauncher(MainGUI parent, ScanManager manager) {
         this.parent = parent;

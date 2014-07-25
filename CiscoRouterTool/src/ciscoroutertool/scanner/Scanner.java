@@ -34,7 +34,7 @@ public class Scanner implements Callable<HostReport> {
     private ArrayList<Rule> matched;
     
     private static final int SSH_PORT = 22;
-    private static final String GET_ALL_CONFIG = "";
+    private static final String GET_ALL_CONFIG = "show running-config";
     
     private Host host;
     public Scanner(Host h) {
@@ -51,12 +51,9 @@ public class Scanner implements Callable<HostReport> {
         while ((line = reader.readLine()) != null) {
             lines.add(line);
         }
-        /**
-         * TODO: Fix so that it will have Settings object
-         */
-        ArrayList<RouterInterface> interfaces = 
-                RouterInterfaceManager.getInterfaces(lines);
-        HostReport report = getHostReport(interfaces);
+        ArrayList<String> activeLines = 
+                RouterInterfaceManager.getActiveConfig(lines);
+        HostReport report = getHostReport(activeLines);
         return report;
     }
     
@@ -81,17 +78,11 @@ public class Scanner implements Callable<HostReport> {
         return new BufferedReader(new InputStreamReader(in));
     }
 
-    private HostReport getHostReport(ArrayList<RouterInterface> interfaces) {
+    private HostReport getHostReport(ArrayList<String> activeConfig) {
         HostReport report = new HostReport(host);
-        for (RouterInterface iface : interfaces) {
-            ArrayList<String> lines = iface.getLines();
-            for (String line : lines) {
-                //Check each rule against each line
-                for (Rule r : rules) {
-                    if (r.matchesRule(line)) {
-                        report.addMatchedRule(r);
-                    }
-                }
+        for (Rule r : rules) {
+            if (r.matchesRule(activeConfig)) {
+                report.addMatchedRule(r);
             }
         }
         return report;

@@ -1,5 +1,7 @@
 package ciscoroutertool.rules;
 
+import java.util.ArrayList;
+
 /**
  * Holds the rules that config files are scanned against
  * @author Andrew Johnston
@@ -44,6 +46,27 @@ public class Rule {
             allTrue = allTrue && b;
         }
         return allTrue;
+    }
+    
+    public boolean matchesRule(ArrayList<String> config) {
+        boolean[] matches = new boolean[settings.length];
+        int i = 0; //shows which part of the rule we're testing
+        for (String line : config) {
+            if (line.matches(settings[i] + "(.*)")) {
+               //Check if it matches the param
+               if (line.matches("(.*)" + params[i])) {
+                    matches[i] = true;
+                    i++; //Move to next part of rule
+               }
+           }           
+        }
+        //Make sure all parts of the rule are satisfied
+        boolean allTrue = true;
+        for (boolean b : matches) {
+            //AND the bools together, must all be true for allTrue to stay true
+            allTrue = allTrue && b;
+        }
+        return allTrue;       
     }
     
 }

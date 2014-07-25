@@ -18,12 +18,12 @@ import java.util.Set;
  */
 public class HostReport {
     
-    private Set<Rule> matchedRules;
+    private ArrayList<Rule> matchedRules;
     private Host host;
     
     public HostReport(Host h) {
         host = h;
-        matchedRules = new HashSet<Rule>();
+        matchedRules = new ArrayList<Rule>();
     }
     
     public void addMatchedRule(Rule r) {
@@ -31,7 +31,7 @@ public class HostReport {
     }
     
     public ArrayList<Rule> getMatchedRules() {
-        return new ArrayList<Rule>(matchedRules);
+        return matchedRules;
     }
     
  
