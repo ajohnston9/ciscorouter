@@ -1,15 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ciscoroutertool.scanner;
+
+import java.util.ArrayList;
 
 /**
  *
  * @author andrew
  */
 public class FullReport {
+    
+    private ArrayList<HostReport> hostReports;
+    
+    public FullReport(ArrayList<HostReport> reports) {
+        hostReports = reports;
+    }
+    
+    public ArrayList<HostReport> getReports() {
+        return hostReports;
+    }
     
 }

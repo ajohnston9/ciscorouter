@@ -43,6 +43,7 @@ public class ScanManager {
      */
     
     public FullReport run() {
+        FullReport fullReport = null;
         try {
             ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
             List<Future<HostReport>> futureReports;
@@ -56,10 +57,11 @@ public class ScanManager {
             for (Future<HostReport> fReport : futureReports) {
                 reports.add(fReport.get());
             }
+            fullReport = new FullReport(reports);
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(ScanManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not finished yet.");
+        return fullReport;
     }
 
 }
