@@ -231,15 +231,14 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddDeviceActionPerformed
 
     private void btnRunScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunScanActionPerformed
-        System.out.println(hosts.size());
         if (hosts.size() < 1) {
             JOptionPane.showMessageDialog(this, "Please enter at least one host.");
-            return;
+        } else {
+            scanning.setVisible(true);
+            ScanManager manager = new ScanManager(hosts);
+            ScanLauncher launcher = new ScanLauncher(this, manager);
+            launcher.execute();
         }
-        scanning.setVisible(true);
-        ScanManager manager = new ScanManager(hosts);
-        ScanLauncher launcher = new ScanLauncher(this, manager);
-        launcher.execute();
         
     }//GEN-LAST:event_btnRunScanActionPerformed
     

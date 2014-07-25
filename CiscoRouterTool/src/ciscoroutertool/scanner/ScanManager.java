@@ -24,11 +24,25 @@ import java.util.logging.Logger;
  */
 public class ScanManager {
 
+    /**
+     * The list of rules to run against each host
+     */
     private ArrayList<Rule> rules;
+    
+    /**
+     * The hosts we are going to scan
+     */
     private ArrayList<Host> hosts;
     
+    /**
+     * The maximum number of scanners to run at once
+     */
     private static final int MAX_THREADS = 5;
     
+    /**
+     * Sets up the ScanManager so it can run scans against the hosts
+     * @param _hosts The hosts you want to scan
+     */
     public ScanManager(ArrayList<Host> _hosts) {
         hosts = _hosts;
         rules = RuleParser.getRules();
@@ -36,12 +50,11 @@ public class ScanManager {
         Scanner.rules = rules;
     }
 
+
     /**
-     * This could benefit from the Observable pattern, so we can launch this
-     * thread and then run the "Please wait..." box, turning it off when we
-     * have results.
+     * Runs the scan on all hosts and returns the full report
+     * @return The report covering all hosts
      */
-    
     public FullReport run() {
         FullReport fullReport = null;
         try {
