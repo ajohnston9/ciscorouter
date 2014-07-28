@@ -6,9 +6,12 @@ import ciscoroutertool.settings.SettingsManager;
 import ciscoroutertool.utils.Host;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * Runs the Main GUI and acts as a portal to the rest of the application
@@ -22,7 +25,7 @@ public class MainGUI extends javax.swing.JFrame {
     private final  FileNameExtensionFilter filter        = new FileNameExtensionFilter("Configuration File", "xml");
     private final  JFileChooser fc                       = new JFileChooser();
     public  final static SettingsManager settingsManager = new SettingsManager();
-    public final ScanningDialog scanning                = new ScanningDialog();
+    public final ScanningDialog scanning                 = new ScanningDialog();
     
     private static final ArrayList<Host> hosts = new ArrayList<>();
     
@@ -67,10 +70,7 @@ public class MainGUI extends javax.swing.JFrame {
 
         currentConfTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Scan", "IP Address", "Scan Type"
@@ -221,12 +221,12 @@ public class MainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_menuCloseActionPerformed
 
     private void menuAddDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddDeviceActionPerformed
-        NewDeviceDialog device = new NewDeviceDialog();
+        NewDeviceDialog device = new NewDeviceDialog(this);
         device.setVisible(true);
     }//GEN-LAST:event_menuAddDeviceActionPerformed
 
     private void btnAddDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDeviceActionPerformed
-        NewDeviceDialog device = new NewDeviceDialog();
+        NewDeviceDialog device = new NewDeviceDialog(this);
         device.setVisible(true);
     }//GEN-LAST:event_btnAddDeviceActionPerformed
 
@@ -283,14 +283,26 @@ public class MainGUI extends javax.swing.JFrame {
         });
     }
     
-    public static void updateTable(Host h) {
-        //TODO: IF host < 4, then update lowest row
-        //else add a row 
+    public void updateTable(Host h) {
+        hosts.add(h);
+        DefaultTableModel model = (DefaultTableModel) 
+                currentConfTable.getModel();
+       Vector v = new Vector();
+       String hosts = h.getAddress().toString();
+       int c = hosts.indexOf("/");
+       hosts = hosts.substring((c + 1));
+       model.addRow(v);
+       int rowToFill = (model.getRowCount() - 1) == 0? 0 : (model.getRowCount() - 1);
+       System.out.println(rowToFill);
+       currentConfTable.setValueAt(true, rowToFill, 0);
+       currentConfTable.setValueAt(hosts, rowToFill, 1);
+       currentConfTable.setValueAt("Full Scan", rowToFill, 2);
+       
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDevice;
     private javax.swing.JToggleButton btnRunScan;
-    private javax.swing.JTable currentConfTable;
+    private static javax.swing.JTable currentConfTable;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JScrollPane jScrollPane1;
