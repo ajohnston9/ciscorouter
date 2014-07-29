@@ -1,5 +1,6 @@
 package ciscoroutertool.gui;
 
+import ciscoroutertool.config.ConfigurationManager;
 import ciscoroutertool.scanner.FullReport;
 import ciscoroutertool.scanner.ScanManager;
 import ciscoroutertool.settings.SettingsManager;
@@ -11,7 +12,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  * Runs the Main GUI and acts as a portal to the rest of the application
@@ -49,6 +49,11 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      * The list of hosts to be scanned
      */
     private static final ArrayList<Host> hosts = new ArrayList<>();
+    
+    /**
+     * The current row of the table we are filling
+     */
+    private int currentRow = 0;
     
     /**
      * Creates new form MainGUI
@@ -91,7 +96,10 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
 
         currentConfTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
                 "Scan", "IP Address", "Scan Type"
@@ -142,6 +150,11 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
 
         menuSaveConfig.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuSaveConfig.setText("Save...");
+        menuSaveConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSaveConfigActionPerformed(evt);
+            }
+        });
         fileMenu.add(menuSaveConfig);
 
         menuRunScan.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
@@ -225,7 +238,12 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
-            //TODO: Read in the hosts, add to hosts object
+            ConfigurationManager manager = new ConfigurationManager(f);
+            ArrayList<Host> configHosts = manager.getAllHosts();
+            hosts.addAll(configHosts);
+            for(Host h : hosts) {
+                this.updateTable(h);
+            }
         }
     }//GEN-LAST:event_menuOpenConfigActionPerformed
 
@@ -294,6 +312,31 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         }
         
     }//GEN-LAST:event_btnRunScanActionPerformed
+
+    /**
+     * Allows the user to save the current configuration from the file
+     * @param evt 
+     */
+    private void menuSaveConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveConfigActionPerformed
+        int returnCode = fc.showSaveDialog(this);
+        if (returnCode == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            String filename = file.getName();
+            //Make sure the filename ends in .xml
+            if (!filename.matches("(.*)\\.xml$")) {
+                filename = filename + ".xml";
+                file = new File(filename);
+            }
+            ConfigurationManager config = new ConfigurationManager(file);
+            for (Host h : hosts) {
+                config.addHost(h);
+            }
+            JOptionPane.showMessageDialog(this, 
+                    "File Saved Successfully!", 
+                    "Save Successful",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_menuSaveConfigActionPerformed
     
     /**
      * Shows the Output window (called after the scan is completed)
@@ -348,19 +391,24 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      * @param h The host to add to the table
      */
     public void updateTable(Host h) {
+        final int ROWS_BY_DEFAULT = 4;
         hosts.add(h);
         DefaultTableModel model = (DefaultTableModel) 
                 currentConfTable.getModel();
-       Vector v = new Vector();
+       
        String hosts = h.getAddress().toString();
        int c = hosts.indexOf("/");
        hosts = hosts.substring((c + 1));
-       model.addRow(v);
-       int rowToFill = (model.getRowCount() - 1) == 0? 0 : (model.getRowCount() - 1);
-       System.out.println(rowToFill);
+       //We have four rows by default
+       if (currentRow >= ROWS_BY_DEFAULT) {
+           Vector v = new Vector();
+           model.addRow(v);
+       }
+       int rowToFill = currentRow;
        currentConfTable.setValueAt(true, rowToFill, 0);
        currentConfTable.setValueAt(hosts, rowToFill, 1);
-       currentConfTable.setValueAt("Full Scan", rowToFill, 2);    
+       currentConfTable.setValueAt("Full Scan", rowToFill, 2);   
+       currentRow++;
     }
     
     /**
@@ -377,6 +425,19 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
     @Override
     public void disposePleaseWaitDialog() {
        scanning.dispose();
+    }
+    
+    /**
+     * Returns a list of hosts to be scanned (factoring in the checkboxes)
+     * @return A list of hosts that are "checked" and should be scanned
+     */
+    public ArrayList<Host> getHostsToScan() {
+        ArrayList<Host> toScan = new ArrayList<>();
+        //TODO: Foreach row
+            //Compare address to "cleaned" address 
+                //If match && box is checked
+                    //add to toScan
+        return toScan;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

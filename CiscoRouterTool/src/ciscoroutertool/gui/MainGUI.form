@@ -27,6 +27,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Save..."/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuSaveConfigActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuRunScan">
               <Properties>
@@ -150,7 +153,7 @@
         <Component class="javax.swing.JTable" name="currentConfTable">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="3" rowCount="0">
+              <Table columnCount="3" rowCount="4">
                 <Column editable="true" title="Scan" type="java.lang.Boolean"/>
                 <Column editable="true" title="IP Address" type="java.lang.Object"/>
                 <Column editable="true" title="Scan Type" type="java.lang.Object"/>
