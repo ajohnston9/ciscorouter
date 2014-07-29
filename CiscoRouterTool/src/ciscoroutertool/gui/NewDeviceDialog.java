@@ -14,7 +14,11 @@ import javax.swing.JOptionPane;
  */
 public class NewDeviceDialog extends javax.swing.JFrame {
 
+    /**
+     * The parent window of the device dialog which will receive the input.
+     */
     private MainGUI parent;
+    
     /**
      * Creates new form NewDeviceDialog
      */
@@ -137,14 +141,23 @@ public class NewDeviceDialog extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Closes the window.
+     * @param evt The ActionEvent object with relevant data
+     */
     private void btnCloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseButtonActionPerformed
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCloseButtonActionPerformed
+
 
     private void sshPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sshPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_sshPasswordActionPerformed
 
+    /**
+     * Adds the device to the current scanning configuration.
+     * @param evt The ActionEvent object with relevant data
+     */
     private void btnAddDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDeviceActionPerformed
         InetAddress hostname = null;
         String host = fieldIPAddr.getText().trim();

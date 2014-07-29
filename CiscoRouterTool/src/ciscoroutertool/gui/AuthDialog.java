@@ -104,10 +104,18 @@ public class AuthDialog extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Closes the Authentication dialog (closing the application).
+     * @param evt The ActionEvent object with relevant data
+     */ 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         System.exit(0);
     }//GEN-LAST:event_btnCloseActionPerformed
 
+    /**
+     * Checks the credentials and allows login if the credentials are correct.
+     * @param evt The ActionEvent object with relevant data
+     */
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String username = fieldUsername.getText().trim();
         String password = new String(fieldPassword.getPassword());

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ciscoroutertool.scanner;
 
 import ciscoroutertool.rules.Rule;
@@ -29,20 +24,45 @@ import java.util.logging.Logger;
  */
 public class Scanner implements Callable<HostReport> {
 
+    /**
+     * The list of rules to check each host against.
+     */
     public static ArrayList<Rule> rules;
     
+    /**
+     * The list of rules that the host matched.
+     */
     private ArrayList<Rule> matched;
     
+    /**
+     * The port the SSH Server is listening on.
+     */
     private static final int SSH_PORT = 22;
+    
+    /**
+     * The command to get the full configuration file from the device.
+     */
     private static final String GET_ALL_CONFIG = "show running-config";
     
-    private Host host;
+    /**
+     * The host that the Scanner object will scan.
+     */
+    private final Host host;
+    
+    /**
+     * Initializes the scanner.
+     * @param h The host to be scanned
+     */
     public Scanner(Host h) {
         host = h;
     }
 
 
-
+    /**
+     * Performs the scan and returns a HostReport containing all matched rules.
+     * @return The HostReport containing the matched rules.
+     * @throws Exception Any Exception generated during the scan.
+     */
     @Override
     public HostReport call() throws Exception {
         BufferedReader reader = getConfigFile();
@@ -57,6 +77,12 @@ public class Scanner implements Callable<HostReport> {
         return report;
     }
     
+    /**
+     * Connects to the device and retrieves the configuration file from the 
+     * device.
+     * @return A BufferedReader containing the output from the GET_ALL_CONFIG 
+     * command 
+     */
     private BufferedReader getConfigFile() {
         InputStream in = null;
         try {
@@ -78,6 +104,12 @@ public class Scanner implements Callable<HostReport> {
         return new BufferedReader(new InputStreamReader(in));
     }
 
+    /**
+     * Compares the rules to the configuration file and stores the matched ones
+     * @param activeConfig The configuration with all shutdown interfaces 
+     * removed.
+     * @return A HostReport containing all matched rules
+     */
     private HostReport getHostReport(ArrayList<String> activeConfig) {
         HostReport report = new HostReport(host);
         for (Rule r : rules) {

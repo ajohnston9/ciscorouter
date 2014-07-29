@@ -17,7 +17,7 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
     /**
      * The GUI that will run the scan
      */
-    private final MainGUI parent;
+    private final ScanLauncherParent parent;
     
     /**
      * The ScanManager for this scan
@@ -29,7 +29,7 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
      * @param parent The GUI launching the ScanLauncher
      * @param manager The ScanManager that will be used
      */
-    public ScanLauncher(MainGUI parent, ScanManager manager) {
+    public ScanLauncher(ScanLauncherParent parent, ScanManager manager) {
         this.parent = parent;
         this.manager = manager;
     }
@@ -41,7 +41,7 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
      */
     @Override
     protected FullReport doInBackground() throws Exception {
-        parent.scanning.setVisible(true);
+        parent.showPleaseWaitDialog();
         return manager.run();
     }
     
@@ -50,7 +50,7 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
      */
     @Override
     protected void done() {
-        parent.scanning.dispose();
+        parent.disposePleaseWaitDialog();
         try {
             parent.displayReport(get());
         } catch (InterruptedException | ExecutionException ex) {

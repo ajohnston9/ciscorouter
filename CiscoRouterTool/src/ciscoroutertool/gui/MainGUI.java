@@ -18,15 +18,36 @@ import javax.swing.table.TableModel;
  * @version 0.01ALPHA
  * @author Andrew H. Johnston
  */
-public class MainGUI extends javax.swing.JFrame {
-    //Default Serial ID
+public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
+    /**
+     * Default Serial ID
+     */
     private static final long serialVersionUID = 1L;
 
-    private final  FileNameExtensionFilter filter        = new FileNameExtensionFilter("Configuration File", "xml");
-    private final  JFileChooser fc                       = new JFileChooser();
-    public  final static SettingsManager settingsManager = new SettingsManager();
-    public final ScanningDialog scanning                 = new ScanningDialog();
+    /**
+     * Filter that will only show configuration (XML) files in the open dialog.
+     */
+    private final FileNameExtensionFilter filter 
+            = new FileNameExtensionFilter("Configuration File", "xml");
     
+    /**
+     * The file dialog used to open/save files
+     */
+    private final  JFileChooser fc = new JFileChooser();
+    
+    /**
+     * The object that allows the app to access and store settings
+     */
+    public final static SettingsManager settingsManager = new SettingsManager();
+    
+    /**
+     * The "Please Wait" dialog that displays while scanning
+     */
+    private final ScanningDialog scanning = new ScanningDialog();
+    
+    /**
+     * The list of hosts to be scanned
+     */
     private static final ArrayList<Host> hosts = new ArrayList<>();
     
     /**
@@ -196,19 +217,31 @@ public class MainGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Handles the opening of previously saved scanning configurations 
+     * @param evt The ActionEvent object with relevant data
+     */
     private void menuOpenConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenConfigActionPerformed
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
-            
+            //TODO: Read in the hosts, add to hosts object
         }
     }//GEN-LAST:event_menuOpenConfigActionPerformed
 
+    /**
+     * Show the box that allows for the setting of a password
+     * @param evt The ActionEvent object with relevant data
+     */
     private void menuSecurityChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSecurityChangeActionPerformed
         SecurityDialog secDialog = new SecurityDialog();
         secDialog.setVisible(true);
     }//GEN-LAST:event_menuSecurityChangeActionPerformed
 
+    /**
+     * Allows the user to close the application
+     * @param evt The ActionEvent object with relevant data
+     */
     private void menuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCloseActionPerformed
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Are you sure you'd like to quit?",
@@ -220,16 +253,36 @@ public class MainGUI extends javax.swing.JFrame {
         //Otherwise do nothing
     }//GEN-LAST:event_menuCloseActionPerformed
 
+    /**
+     * Opens the window to allow a new device to be added to the current scan 
+     * configuration.
+     * @param evt The ActionEvent object with relevant data
+     */
     private void menuAddDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAddDeviceActionPerformed
-        NewDeviceDialog device = new NewDeviceDialog(this);
-        device.setVisible(true);
+        this.openNewDeviceDialog();
     }//GEN-LAST:event_menuAddDeviceActionPerformed
 
+    /**
+     * Opens the window to allow a new device to be added to the current scan 
+     * configuration.
+     * @param evt The ActionEvent object with relevant data
+     */
     private void btnAddDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddDeviceActionPerformed
-        NewDeviceDialog device = new NewDeviceDialog(this);
-        device.setVisible(true);
+        this.openNewDeviceDialog();
     }//GEN-LAST:event_btnAddDeviceActionPerformed
 
+    /**
+     * Opens the new device dialog with all relevant parameters
+     */
+    private void openNewDeviceDialog() {
+        NewDeviceDialog device = new NewDeviceDialog(this);
+        device.setVisible(true);
+    }
+    
+    /**
+     * Runs a scan on the selected hosts.
+     * @param evt The ActionEvent object with relevant data
+     */
     private void btnRunScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunScanActionPerformed
         if (hosts.size() < 1) {
             JOptionPane.showMessageDialog(this, "Please enter at least one host.");
@@ -242,12 +295,17 @@ public class MainGUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnRunScanActionPerformed
     
+    /**
+     * Shows the Output window (called after the scan is completed)
+     * @param report The Full Report on all hosts
+     */
     public void displayReport(FullReport report) {
         OutputReview output = new OutputReview(report);
         output.setVisible(true);
     }
     
     /**
+     * Starts the application
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -283,6 +341,12 @@ public class MainGUI extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * Adds a host to be scanned into the JTable and to the ArrayList. Note that
+     * the JTable is merely for presentation, the ArrayList holds the actual 
+     * data.
+     * @param h The host to add to the table
+     */
     public void updateTable(Host h) {
         hosts.add(h);
         DefaultTableModel model = (DefaultTableModel) 
@@ -296,9 +360,25 @@ public class MainGUI extends javax.swing.JFrame {
        System.out.println(rowToFill);
        currentConfTable.setValueAt(true, rowToFill, 0);
        currentConfTable.setValueAt(hosts, rowToFill, 1);
-       currentConfTable.setValueAt("Full Scan", rowToFill, 2);
-       
+       currentConfTable.setValueAt("Full Scan", rowToFill, 2);    
     }
+    
+    /**
+     * Shows the "Please Wait" Dialog while the scan runs.
+     */
+    @Override
+    public void showPleaseWaitDialog() {
+       scanning.setVisible(true);
+    }
+
+    /**
+     * Removes the "Please Wait" Dialog once the scan is finished.
+     */
+    @Override
+    public void disposePleaseWaitDialog() {
+       scanning.dispose();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDevice;
     private javax.swing.JToggleButton btnRunScan;
