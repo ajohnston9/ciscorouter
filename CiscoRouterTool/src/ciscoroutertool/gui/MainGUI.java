@@ -396,9 +396,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         DefaultTableModel model = (DefaultTableModel) 
                 currentConfTable.getModel();
        
-       String hosts = h.getAddress().toString();
-       int c = hosts.indexOf("/");
-       hosts = hosts.substring((c + 1));
+       String hosts = this.getCleanHostname(h);
        //We have four rows by default
        if (currentRow >= ROWS_BY_DEFAULT) {
            Vector v = new Vector();
@@ -410,7 +408,17 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
        currentConfTable.setValueAt("Full Scan", rowToFill, 2);   
        currentRow++;
     }
-    
+
+    /**
+     * Returns a "cleaned" version of the hostname
+     * @return Just the IP address of a hostname
+     */
+    private String getCleanHostname(Host h) {
+        String hosts = h.getAddress().toString();
+        int c = hosts.indexOf("/");
+        hosts = hosts.substring((c + 1));
+        return hosts;
+    }
     /**
      * Shows the "Please Wait" Dialog while the scan runs.
      */
@@ -433,10 +441,21 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      */
     public ArrayList<Host> getHostsToScan() {
         ArrayList<Host> toScan = new ArrayList<>();
-        //TODO: Foreach row
-            //Compare address to "cleaned" address 
-                //If match && box is checked
-                    //add to toScan
+        DefaultTableModel tableModel = (DefaultTableModel) currentConfTable.getModel();
+        int numRows = tableModel.getRowCount();
+        for (int i = 0; i < numRows; i++) {
+            //If the host is unchecked
+            if (!((boolean)tableModel.getValueAt(i, 0))) {
+                continue; //Don't bother processing it
+            }
+            String guiHostname = (String) tableModel.getValueAt(i,1);
+            for (Host h : hosts) {
+                String hostname = this.getCleanHostname(h);
+                if (hostname.compareTo(guiHostname) == 0) {
+                    toScan.add(h);
+                }
+            }
+        }
         return toScan;
     }
     
