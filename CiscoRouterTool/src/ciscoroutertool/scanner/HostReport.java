@@ -31,6 +31,10 @@ public class HostReport {
     public ArrayList<Rule> getMatchedRules() {
         return matchedRules;
     }
+
+    public Host getHost() {
+        return host;
+    }
     
  
     

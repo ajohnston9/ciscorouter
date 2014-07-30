@@ -32,4 +32,11 @@ public class Host {
         return pass;
     }
 
+    public String toString() {
+        String hosts = ip_addr.toString();
+        int c = hosts.indexOf("/");
+        hosts = hosts.substring((c + 1));
+        return hosts;
+    }
+
 }

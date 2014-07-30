@@ -1,6 +1,12 @@
 package ciscoroutertool.gui;
 
+import ciscoroutertool.rules.Rule;
 import ciscoroutertool.scanner.FullReport;
+import ciscoroutertool.scanner.HostReport;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.ArrayList;
 
 /**
  * This window displays the output in a tree format and lets the user remove
@@ -17,7 +23,22 @@ public class OutputReview extends javax.swing.JFrame {
      */
     public OutputReview(FullReport r) {
         report = r;
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+        ArrayList<HostReport> reports = report.getReports();
+        for (HostReport h : reports) {
+            DefaultMutableTreeNode host = new DefaultMutableTreeNode(h.getHost().toString());
+            ArrayList<Rule> matchedRules = h.getMatchedRules();
+            for (Rule rule : matchedRules) {
+                DefaultMutableTreeNode ruleName = new DefaultMutableTreeNode(rule.getName());
+                DefaultMutableTreeNode ruleDesc = new DefaultMutableTreeNode(rule.getDescription());
+                ruleName.add(ruleDesc);
+                host.add(ruleName);
+            }
+            root.add(host);
+        }
         initComponents();
+        reportTree = new JTree(root);
+        reportTree.setRootVisible(false);
     }
 
     /**

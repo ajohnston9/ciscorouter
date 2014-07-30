@@ -82,5 +82,12 @@ public class Rule {
         }
         return allTrue;       
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

@@ -5,13 +5,13 @@ import ciscoroutertool.scanner.FullReport;
 import ciscoroutertool.scanner.ScanManager;
 import ciscoroutertool.settings.SettingsManager;
 import ciscoroutertool.utils.Host;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Runs the Main GUI and acts as a portal to the rest of the application
@@ -397,7 +397,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         DefaultTableModel model = (DefaultTableModel) 
                 currentConfTable.getModel();
        
-       String hosts = this.getCleanHostname(h);
+       String hosts = h.toString();
        //We have four rows by default
        if (currentRow >= ROWS_BY_DEFAULT) {
            Vector v = new Vector();
@@ -451,7 +451,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
             }
             String guiHostname = (String) tableModel.getValueAt(i,1);
             for (Host h : hosts) {
-                String hostname = this.getCleanHostname(h);
+                String hostname = h.toString();
                 if (hostname.compareTo(guiHostname) == 0) {
                     toScan.add(h);
                 }
