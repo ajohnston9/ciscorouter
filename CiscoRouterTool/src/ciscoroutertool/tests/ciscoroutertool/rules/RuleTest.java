@@ -21,6 +21,14 @@ public class RuleTest {
     }
 
     @Test
+    public void ruleShouldMatchRegex() throws Exception {
+        String[] sett  = {"enable secret "};
+        String[] param = {"(.*)"};
+        Rule testrule = new Rule("Sample Rule", "Sample Description", "High", sett, param);
+        assertTrue("Regex should match!", testrule.matchesRule("enable secret supersecret"));
+    }
+
+    @Test
     public void ruleShouldFindMatchInConfig() throws Exception {
         String[] sett  = {"enable secret "};
         String[] param = {"cisco"};
@@ -42,8 +50,8 @@ public class RuleTest {
 
     @Test
     public void multipleRulesAllMustMatch() throws Exception {
-        String[] sett  = {"enable secret ", " sample "};
-        String[] param = {"cisco", "s"};
+        String[] sett  = {"enable secret ", "(.*)test "};
+        String[] param = {"cisco", "here"};
         Rule testrule = new Rule("Sample Rule", "Sample Description", "High", sett, param);
         //Start off with two "Config" files
         String sampleConfigShouldMatch    = "interface whatever\n sample s\n test 5\nenable secret cisco\ntest here";

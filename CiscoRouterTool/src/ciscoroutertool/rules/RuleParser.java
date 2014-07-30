@@ -1,18 +1,16 @@
 package ciscoroutertool.rules;
 
+import nu.xom.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.ParsingException;
 
 /**
  * Parses rule definitions and returns a list of rules to the system
+ * @version 0.01ALPHA
  * @author Andrew Johnston
  */
 public class RuleParser {
@@ -35,7 +33,7 @@ public class RuleParser {
         return rules;
     }
     
-    private static Rule getRuleFromFile(File f) {
+    public static Rule getRuleFromFile(File f) {
         Rule r = null;
         try {
             Builder parser = new Builder();
