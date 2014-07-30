@@ -1,11 +1,10 @@
 package ciscoroutertool.gui;
 
 import ciscoroutertool.utils.Host;
+
+import javax.swing.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  * Allows a user to add a new device
@@ -152,7 +151,7 @@ public class NewDeviceDialog extends javax.swing.JFrame {
 
 
     private void sshPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sshPasswordActionPerformed
-        // TODO add your handling code here:
+        //FIXME: Not used
     }//GEN-LAST:event_sshPasswordActionPerformed
 
     /**

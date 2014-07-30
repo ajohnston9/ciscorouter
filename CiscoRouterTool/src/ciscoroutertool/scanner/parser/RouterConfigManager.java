@@ -1,6 +1,5 @@
 package ciscoroutertool.scanner.parser;
 
-import ciscoroutertool.scanner.parser.RouterInterface;
 import java.util.ArrayList;
 
 /**
@@ -49,11 +48,6 @@ public class RouterConfigManager {
     public static ArrayList<RouterInterface> getInterfaces(ArrayList<String> lines) {
         ArrayList<RouterInterface> interfaces = new ArrayList<>();
         int current = 0;
-        /**
-         * FIXME: What about global settings defined before/after interface
-         * definitions?
-         * NOTE: Must check 
-         */
         interfaces.add(new RouterInterface());
         for (String line : lines) {
             //If it's not a new interface

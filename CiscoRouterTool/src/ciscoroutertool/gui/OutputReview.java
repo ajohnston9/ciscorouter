@@ -6,6 +6,9 @@ import ciscoroutertool.scanner.HostReport;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 public class OutputReview extends javax.swing.JFrame {
 
     private FullReport report;
+    private DefaultMutableTreeNode selected = null;
     
     /**
      * Creates new form OutputReview
@@ -38,6 +42,9 @@ public class OutputReview extends javax.swing.JFrame {
         }
         initComponents();
         reportTree = new JTree(root);
+        //The following allows for us to select one node at a time (for deletion)
+        reportTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        //Hide the root node so it looks like the hosts are the root node
         reportTree.setRootVisible(false);
     }
 
@@ -123,10 +130,20 @@ public class OutputReview extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO: Get Selected Node, Delete, Refresh Model
+        //TODO: Remove relevant HostReport from FullReport
+        selected = (DefaultMutableTreeNode) reportTree.getLastSelectedPathComponent();
+        if (selected == null) {
+            //Nothing is selected
+            return;
+        }
+        MutableTreeNode parent = (MutableTreeNode) selected.getParent();
+        int index = parent.getIndex(selected);
+        parent.remove(selected);
+
+        DefaultTreeModel model = (DefaultTreeModel) reportTree.getModel();
+        model.nodesWereRemoved(parent, new int[]{index}, new Object[]{selected});
+
     }//GEN-LAST:event_btnDeleteActionPerformed
-
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCSV;
