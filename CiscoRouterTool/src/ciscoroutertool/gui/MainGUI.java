@@ -315,7 +315,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
 
     /**
      * Allows the user to save the current configuration from the file
-     * @param evt 
+     * @param evt The ActionEvent object with relevant data
      */
     private void menuSaveConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveConfigActionPerformed
         int returnCode = fc.showSaveDialog(this);
