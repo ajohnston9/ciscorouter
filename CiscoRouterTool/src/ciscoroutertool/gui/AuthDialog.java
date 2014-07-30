@@ -123,7 +123,7 @@ public class AuthDialog extends javax.swing.JFrame {
             this.setVisible(false);
         }
         else {
-            JOptionPane.showConfirmDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "Please reenter your credentials", 
                     "Invalid ID or Password",
                     JOptionPane.ERROR_MESSAGE);

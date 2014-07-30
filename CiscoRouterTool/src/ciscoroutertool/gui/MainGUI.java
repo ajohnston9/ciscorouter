@@ -351,6 +351,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      * Starts the application
      * @param args the command line arguments
      */
+    @SuppressWarnings("TryWithIdenticalCatches")
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

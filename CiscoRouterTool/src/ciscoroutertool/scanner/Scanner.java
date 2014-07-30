@@ -2,7 +2,6 @@ package ciscoroutertool.scanner;
 
 import ciscoroutertool.rules.Rule;
 import ciscoroutertool.scanner.parser.RouterConfigManager;
-import ciscoroutertool.scanner.parser.RouterInterface;
 import ciscoroutertool.utils.Host;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -73,8 +72,7 @@ public class Scanner implements Callable<HostReport> {
         }
         ArrayList<String> activeLines = 
                 RouterConfigManager.getActiveConfig(lines);
-        HostReport report = getHostReport(activeLines);
-        return report;
+        return getHostReport(activeLines);
     }
     
     /**
@@ -101,6 +99,7 @@ public class Scanner implements Callable<HostReport> {
         } catch (JSchException | IOException ex) {
             Logger.getLogger(Scanner.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //noinspection ConstantConditions
         return new BufferedReader(new InputStreamReader(in));
     }
 

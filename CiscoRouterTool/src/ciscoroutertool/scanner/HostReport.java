@@ -9,8 +9,6 @@ package ciscoroutertool.scanner;
 import ciscoroutertool.rules.Rule;
 import ciscoroutertool.utils.Host;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -23,7 +21,7 @@ public class HostReport {
     
     public HostReport(Host h) {
         host = h;
-        matchedRules = new ArrayList<Rule>();
+        matchedRules = new ArrayList<>();
     }
     
     public void addMatchedRule(Rule r) {

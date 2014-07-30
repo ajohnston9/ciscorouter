@@ -23,7 +23,7 @@ public interface ScanLauncherParent {
     
     /**
      * Displays the report once the scan is finished
-     * @param report 
+     * @param report The report to show in the output window
      */
     public void displayReport(FullReport report);
     

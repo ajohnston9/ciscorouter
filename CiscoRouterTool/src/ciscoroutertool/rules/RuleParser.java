@@ -18,16 +18,18 @@ import nu.xom.ParsingException;
 public class RuleParser {
     
     public static ArrayList<Rule> getRules() {
-        ArrayList<Rule> rules = new ArrayList<Rule>();
+        ArrayList<Rule> rules = new ArrayList<>();
         //Get the current working directory
         String cwd = System.getProperty("user.dir");
         String xmlDirectory = cwd + "/xml";
         File xmlFolder = new File(xmlDirectory);
         File[] ruleFiles = xmlFolder.listFiles();
-        for (File rule : ruleFiles) {
-            if (rule.isFile()) {
-                Rule r = getRuleFromFile(rule);
-                rules.add(r);
+        if (ruleFiles != null) {
+            for (File rule : ruleFiles) {
+                if (rule.isFile()) {
+                    Rule r = getRuleFromFile(rule);
+                    rules.add(r);
+                }
             }
         }
         return rules;

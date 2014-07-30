@@ -22,8 +22,8 @@ public class SettingsManager {
      * Constructs the class. Requires settings.xml to be present to run
      */
     public SettingsManager() {
-        //Open settings.xml using XOM library
-        //Store relevant settings in private variables
+        //TODO: Open settings.xml using XOM library
+        //TODO: Store relevant settings in private variables
         
     }
     
@@ -62,12 +62,10 @@ public class SettingsManager {
         String hashedPassword;
         try {
             hashedPassword = PasswordHash.createHash(_password);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
             Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Store _username and hashedPassword in Settings file
+        //TODO: Store _username and hashedPassword in Settings file
     }
 
 }
