@@ -1,17 +1,16 @@
 package ciscoroutertool.config;
 
 import ciscoroutertool.utils.Host;
+import nu.xom.*;
+
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.ParsingException;
 
 
 /**
@@ -88,8 +87,36 @@ public class ConfigurationManager {
     /**
      * Saves the updated configuration to the specified file.
      */
-    public void updateConfiguration() {
-        //TODO: Save config to file
+    public void updateConfiguration(File save) {
+        Element root = new Element("Hosts");
+        for(Host h : hosts) {
+            Element host = new Element("Host");
+
+            Element ip   = new Element("IP");
+            ip.appendChild(h.getAddress().toString());
+            host.appendChild(ip);
+
+            Element username = new Element("Username");
+            username.appendChild(h.getUser());
+            host.appendChild(username);
+
+            Element password = new Element("Password");
+            password.appendChild(h.getPass());
+            host.appendChild(password);
+
+            root.appendChild(host);
+        }
+        Document doc = new Document(root);
+        FileWriter f = null;
+        try {
+            f = new FileWriter(save);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PrintWriter p = new PrintWriter(f);
+        p.write(doc.toXML());
+        p.flush();
+        p.close();
     }
 
 }
