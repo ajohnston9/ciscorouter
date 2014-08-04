@@ -243,7 +243,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
             ArrayList<Host> configHosts = manager.getAllHosts();
             hosts.addAll(configHosts);
             for(Host h : hosts) {
-                this.updateTable(h);
+                this.addHostToTable(h);
             }
         }
     }//GEN-LAST:event_menuOpenConfigActionPerformed
@@ -390,22 +390,30 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      * @param h The host to add to the table
      */
     public void updateTable(Host h) {
-        final int ROWS_BY_DEFAULT = 4;
         hosts.add(h);
-        DefaultTableModel model = (DefaultTableModel) 
+        this.addHostToTable(h);
+    }
+
+    /**
+     * Adds a host to the JTable
+     * @param h The host to add to the table
+     */
+    public void addHostToTable(Host h) {
+        final int ROWS_BY_DEFAULT = 4;
+        DefaultTableModel model = (DefaultTableModel)
                 currentConfTable.getModel();
-       
-       String hosts = h.toString();
-       //We have four rows by default
-       if (currentRow >= ROWS_BY_DEFAULT) {
-           Vector v = new Vector();
-           model.addRow(v);
-       }
-       int rowToFill = currentRow;
-       currentConfTable.setValueAt(true, rowToFill, 0);
-       currentConfTable.setValueAt(hosts, rowToFill, 1);
-       currentConfTable.setValueAt("Full Scan", rowToFill, 2);   
-       currentRow++;
+
+        String hosts = h.toString();
+        //We have four rows by default
+        if (currentRow >= ROWS_BY_DEFAULT) {
+            Vector v = new Vector();
+            model.addRow(v);
+        }
+        int rowToFill = currentRow;
+        currentConfTable.setValueAt(true, rowToFill, 0);
+        currentConfTable.setValueAt(hosts, rowToFill, 1);
+        currentConfTable.setValueAt("Full Scan", rowToFill, 2);
+        currentRow++;
     }
 
     /**

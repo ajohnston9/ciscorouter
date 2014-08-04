@@ -49,9 +49,17 @@ public class ConfigurationManager {
                 String ip, user, pass;
                 Element host = eHosts.get(i);
                 ip   = host.getFirstChildElement("IP").getValue();
+
+                //Handle the case where InetAddress gets stored with forward slash
+                if (ip.contains("/")) {
+                    int index = ip.indexOf("/");
+                    ip = ip.substring((index + 1));
+                }
+
                 user = host.getFirstChildElement("Username").getValue();
                 pass = host.getFirstChildElement("Password").getValue();
-                hosts.add(new Host(InetAddress.getByName(ip), user, pass));
+                InetAddress address = InetAddress.getByName(ip);
+                _hosts.add(new Host(address, user, pass));
             }
             
         } catch (ParsingException | IOException ex) {
