@@ -87,9 +87,9 @@ public class ConfigurationManager {
     /**
      * Saves the updated configuration to the specified file.
      */
-    public void updateConfiguration(File save) {
+    public static void saveConfiguration(File save, ArrayList<Host> saveHosts) {
         Element root = new Element("Hosts");
-        for(Host h : hosts) {
+        for(Host h : saveHosts) {
             Element host = new Element("Host");
 
             Element ip   = new Element("IP");

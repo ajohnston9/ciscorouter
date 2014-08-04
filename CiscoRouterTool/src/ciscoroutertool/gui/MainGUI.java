@@ -328,10 +328,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
                 filename = filename + ".xml";
                 file = new File(filename);
             }
-            ConfigurationManager config = new ConfigurationManager(file);
-            for (Host h : hosts) {
-                config.addHost(h);
-            }
+            ConfigurationManager.saveConfiguration(file, hosts);
             JOptionPane.showMessageDialog(this, 
                     "File Saved Successfully!", 
                     "Save Successful",
