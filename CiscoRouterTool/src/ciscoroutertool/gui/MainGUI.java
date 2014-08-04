@@ -307,7 +307,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
             JOptionPane.showMessageDialog(this, "Please enter at least one host.");
         } else {
             scanning.setVisible(true);
-            ScanManager manager = new ScanManager(hosts);
+            ScanManager manager = new ScanManager(this.getHostsToScan());
             ScanLauncher launcher = new ScanLauncher(this, manager);
             launcher.execute();
         }
