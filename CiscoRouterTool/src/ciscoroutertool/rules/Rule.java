@@ -6,18 +6,54 @@ import java.util.regex.Pattern;
 
 /**
  * Holds the rules that config files are scanned against
+ * @version 0.01ALPHA
  * @author Andrew Johnston
  */
 public class Rule {
-    
+
+    /**
+     * The name of the Rule
+     */
     private String   name;
+
+    /**
+     * The description of what the rule looks for
+     */
     private String   description;
+
+    /**
+     * The severity of the vulnerability should the rule match
+     */
     private String   severity;
+
+    /**
+     * An array of settings to look for in a rule file
+     */
     private String[] settings;
+
+    /**
+     * An array of parameters to look for should a setting match
+     */
     private String[] params;
+
+    /**
+     * An array of pattern objects used to do pattern matching (formed from the setting array)
+     */
     private Pattern[] settPattern;
+
+    /**
+     * An array of pattern objects used to do pattern matching (formed from the parameter array)
+     */
     private Pattern[] paramPattern;
-    
+
+    /**
+     * Constructs the rule with all relevant information
+     * @param _name The name of the rule (presented to the user on match)
+     * @param _desc The description of what the rule looks for (presented to the user on match)
+     * @param _sev The severity of a rule match
+     * @param _sett An array of settings to look for
+     * @param _params An array of parameters to check should a setting be found.
+     */
     public Rule(String _name, String _desc, String _sev, String[] _sett, String[] _params) {
         name        = _name;
         description = _desc;
@@ -31,7 +67,13 @@ public class Rule {
             paramPattern[i] = Pattern.compile("(.*)" + params[i]);
         }
     }
-    
+
+    /**
+     * Returns true if a rule matches a specific line
+     * @param config The line to check
+     * @return true if the rule matches the line
+     * @return false if the rule does not match the line
+     */
     public boolean matchesRule(String config) {
         //Needs to match every rule in the ruleset
         boolean[] matches = new boolean[settings.length];
@@ -58,7 +100,13 @@ public class Rule {
         }
         return allTrue;
     }
-    
+
+    /**
+     * Given a config file, will return true should the rule match the file
+     * @param config The ArrayList of lines in the config file
+     * @return true if the rule matches
+     * @return false if the rule doesn't match
+     */
     public boolean matchesRule(ArrayList<String> config) {
         boolean[] matches = new boolean[settings.length];
         int i = 0; //shows which part of the rule we're testing
@@ -83,10 +131,18 @@ public class Rule {
         return allTrue;       
     }
 
+    /**
+     * Returns the name of the Rule
+     * @return the name of the rule as a String
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the description of the Rule
+     * @return the description of the rule as a String
+     */
     public String getDescription() {
         return description;
     }
