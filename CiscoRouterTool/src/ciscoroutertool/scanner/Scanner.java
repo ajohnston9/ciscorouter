@@ -41,7 +41,7 @@ public class Scanner implements Callable<HostReport> {
     /**
      * The command to get the full configuration file from the device.
      */
-    private static final String GET_ALL_CONFIG = "show running-config";
+    private static final String GET_ALL_CONFIG = "show running-config full";
     
     /**
      * The host that the Scanner object will scan.
