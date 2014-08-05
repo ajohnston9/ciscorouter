@@ -20,7 +20,7 @@ public class ScannerTest {
 
     @Before
     public void init() {
-        sett[0] = "(.*)";
+        sett[0] = "enable secret ";
         param[0] = "(.*)";
         rule = new ArrayList<>();
         rule.add(new Rule("Test rule", "Sample Description", "Low", sett, param));

@@ -75,7 +75,6 @@ public class Scanner implements Callable<HostReport> {
         ArrayList<String> lines = new ArrayList<>();
         try {
             while ((line = reader.readLine()) != null) {
-                System.out.println("DEBUG: line is " + line);
                 lines.add(line.trim());
             }
         } catch (IOException e) {
@@ -106,9 +105,6 @@ public class Scanner implements Callable<HostReport> {
         //Run the command that gets the config
         Channel channel=session.openChannel("exec");
         ((ChannelExec)channel).setCommand(GET_ALL_CONFIG);
-/*        ChannelExec exec = (ChannelExec) session.openChannel("exec");
-        in = exec.getInputStream();
-        exec.setCommand(GET_ALL_CONFIG);*/
         in = channel.getInputStream();
         channel.connect();
         return new BufferedReader(new InputStreamReader(in));
