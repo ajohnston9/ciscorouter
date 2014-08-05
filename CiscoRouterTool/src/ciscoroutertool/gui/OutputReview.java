@@ -30,9 +30,13 @@ public class OutputReview extends javax.swing.JFrame {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
         ArrayList<HostReport> reports = report.getReports();
         for (HostReport h : reports) {
+            System.out.println("DEBUG: Host report for: " + h.getHost().toString());
             DefaultMutableTreeNode host = new DefaultMutableTreeNode(h.getHost().toString());
+            System.out.println("DEBUG: Found " + h.getMatchedRules().size() + " matched rules");
             ArrayList<Rule> matchedRules = h.getMatchedRules();
             for (Rule rule : matchedRules) {
+                System.out.println("\tDEBUG: Matched rule name: " + rule.getName());
+                System.out.println("\tDEBUG: Matched rule description: " + rule.getDescription());
                 DefaultMutableTreeNode ruleName = new DefaultMutableTreeNode(rule.getName());
                 DefaultMutableTreeNode ruleDesc = new DefaultMutableTreeNode(rule.getDescription());
                 ruleName.add(ruleDesc);

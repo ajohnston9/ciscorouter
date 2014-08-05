@@ -448,7 +448,8 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
     public ArrayList<Host> getHostsToScan() {
         ArrayList<Host> toScan = new ArrayList<>();
         DefaultTableModel tableModel = (DefaultTableModel) currentConfTable.getModel();
-        int numRows = tableModel.getRowCount();
+        //By writing the number of rows as currentRow, we won't deal with empty rows!
+        int numRows = currentRow;
         for (int i = 0; i < numRows; i++) {
             //If the host is unchecked
             if (!((boolean)tableModel.getValueAt(i, 0))) {

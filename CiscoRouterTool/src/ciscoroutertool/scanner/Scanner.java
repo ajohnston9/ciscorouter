@@ -67,6 +67,9 @@ public class Scanner implements Callable<HostReport> {
         try {
             reader = getConfigFile();
         } catch (JSchException | IOException e) {
+            System.err.println("Failed to connect to host " + host.getAddress().toString() + ". Please check " +
+                "URL and credentials and rerun.");
+            System.err.println("The exact error was: " + e.getMessage());
             //We won't have any data on the host, so construct an empty report and throw it back
             HostReport failedToConnect = new HostReport(host);
             return failedToConnect;
@@ -74,6 +77,7 @@ public class Scanner implements Callable<HostReport> {
         String line = null;
         ArrayList<String> lines = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
+            System.out.println("DEBUG: line is " + line);
             lines.add(line);
         }
         ArrayList<String> activeLines = 
@@ -89,18 +93,20 @@ public class Scanner implements Callable<HostReport> {
      */
     private BufferedReader getConfigFile() throws JSchException, IOException{
         InputStream in = null;
-            JSch jsch = new JSch();
-            Session session = jsch.getSession(
-                    host.getUser(),
-                    host.getAddress().getHostAddress(),
-                    SSH_PORT);
-            session.setPassword(host.getPass());
-            session.connect();
-            //Run the command that gets the config
-            ChannelExec exec = (ChannelExec) session.openChannel("exec");
-            in = exec.getInputStream();
-            exec.setCommand(GET_ALL_CONFIG);
-            exec.connect();
+        JSch jsch = new JSch();
+        Session session = jsch.getSession(
+                host.getUser(),
+                host.getAddress().getHostAddress(),
+                SSH_PORT);
+        session.setPassword(host.getPass());
+        //If this line isn't present, every host must be in known_hosts
+        session.setConfig("StrictHostKeyChecking", "no");
+        session.connect();
+        //Run the command that gets the config
+        ChannelExec exec = (ChannelExec) session.openChannel("exec");
+        in = exec.getInputStream();
+        exec.setCommand(GET_ALL_CONFIG);
+        exec.connect();
         //noinspection ConstantConditions
         return new BufferedReader(new InputStreamReader(in));
     }
