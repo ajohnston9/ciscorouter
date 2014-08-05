@@ -3,10 +3,7 @@ package ciscoroutertool.scanner;
 import ciscoroutertool.rules.Rule;
 import ciscoroutertool.scanner.parser.RouterConfigManager;
 import ciscoroutertool.utils.Host;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,7 +59,7 @@ public class Scanner implements Callable<HostReport> {
      * @throws Exception Any Unhandled exception generated during the scan.
      */
     @Override
-    public HostReport call() throws Exception {
+    public HostReport call()  {
         BufferedReader reader = null;
         try {
             reader = getConfigFile();
@@ -76,9 +73,13 @@ public class Scanner implements Callable<HostReport> {
         }
         String line = null;
         ArrayList<String> lines = new ArrayList<>();
-        while ((line = reader.readLine()) != null) {
-            System.out.println("DEBUG: line is " + line);
-            lines.add(line);
+        try {
+            while ((line = reader.readLine()) != null) {
+                System.out.println("DEBUG: line is " + line);
+                lines.add(line.trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         ArrayList<String> activeLines = 
                 RouterConfigManager.getActiveConfig(lines);
@@ -103,11 +104,13 @@ public class Scanner implements Callable<HostReport> {
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
         //Run the command that gets the config
-        ChannelExec exec = (ChannelExec) session.openChannel("exec");
+        Channel channel=session.openChannel("exec");
+        ((ChannelExec)channel).setCommand(GET_ALL_CONFIG);
+/*        ChannelExec exec = (ChannelExec) session.openChannel("exec");
         in = exec.getInputStream();
-        exec.setCommand(GET_ALL_CONFIG);
-        exec.connect();
-        //noinspection ConstantConditions
+        exec.setCommand(GET_ALL_CONFIG);*/
+        in = channel.getInputStream();
+        channel.connect();
         return new BufferedReader(new InputStreamReader(in));
     }
 

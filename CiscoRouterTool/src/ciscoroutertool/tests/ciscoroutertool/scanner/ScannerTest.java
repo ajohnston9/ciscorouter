@@ -20,12 +20,12 @@ public class ScannerTest {
 
     @Before
     public void init() {
-        sett[0] = "enable secret ";
+        sett[0] = "(.*)";
         param[0] = "(.*)";
         rule = new ArrayList<>();
         rule.add(new Rule("Test rule", "Sample Description", "Low", sett, param));
         try {
-            testHost = new Host(InetAddress.getByName("test-host.com"), "username", "passwrd");
+            testHost = new Host(InetAddress.getByName("ASK_ANDREW_FOR_TEST_HOST"), "johnston", "ASK_ANDREW_FOR_PASSWORD");
         } catch (UnknownHostException e) {
             Assert.fail();
         }
@@ -40,7 +40,7 @@ public class ScannerTest {
         Rule matched = null;
         try {
             matched = test.getMatchedRules().get(0);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             Assert.assertNotNull("Rule should have matched config!", matched);
         }
         Assert.assertNotNull("Rule should have matched config!", matched);
