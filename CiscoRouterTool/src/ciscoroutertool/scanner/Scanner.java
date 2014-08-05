@@ -104,7 +104,8 @@ public class Scanner implements Callable<HostReport> {
         session.connect();
         //Run the command that gets the config
         Channel channel=session.openChannel("exec");
-        ((ChannelExec)channel).setCommand(GET_ALL_CONFIG);
+        //FIXME: Changed for full application testing
+        ((ChannelExec)channel).setCommand("./" + GET_ALL_CONFIG);
         in = channel.getInputStream();
         channel.connect();
         return new BufferedReader(new InputStreamReader(in));

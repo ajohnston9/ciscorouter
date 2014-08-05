@@ -4,7 +4,6 @@ import ciscoroutertool.rules.Rule;
 import ciscoroutertool.scanner.FullReport;
 import ciscoroutertool.scanner.HostReport;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -21,6 +20,7 @@ public class OutputReview extends javax.swing.JFrame {
 
     private FullReport report;
     private DefaultMutableTreeNode selected = null;
+    private DefaultTreeModel model;
     
     /**
      * Creates new form OutputReview
@@ -45,7 +45,8 @@ public class OutputReview extends javax.swing.JFrame {
             root.add(host);
         }
         initComponents();
-        reportTree = new JTree(root);
+        model = new DefaultTreeModel(root);
+        reportTree.setModel(model);
         //The following allows for us to select one node at a time (for deletion)
         reportTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         //Hide the root node so it looks like the hosts are the root node
@@ -143,9 +144,8 @@ public class OutputReview extends javax.swing.JFrame {
         MutableTreeNode parent = (MutableTreeNode) selected.getParent();
         int index = parent.getIndex(selected);
         parent.remove(selected);
-
-        DefaultTreeModel model = (DefaultTreeModel) reportTree.getModel();
         model.nodesWereRemoved(parent, new int[]{index}, new Object[]{selected});
+        reportTree.setModel(model);
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 

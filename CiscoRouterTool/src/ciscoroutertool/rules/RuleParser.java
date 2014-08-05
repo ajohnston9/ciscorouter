@@ -19,7 +19,7 @@ public class RuleParser {
         ArrayList<Rule> rules = new ArrayList<>();
         //Get the current working directory
         String cwd = System.getProperty("user.dir");
-        String xmlDirectory = cwd + "/xml";
+        String xmlDirectory = cwd + "/rules";
         File xmlFolder = new File(xmlDirectory);
         File[] ruleFiles = xmlFolder.listFiles();
         if (ruleFiles != null) {
@@ -29,6 +29,9 @@ public class RuleParser {
                     rules.add(r);
                 }
             }
+        }
+        if (rules.size() == 0) {
+            System.err.println("ERROR: No rules found. Scan will fail.");
         }
         return rules;
     }
