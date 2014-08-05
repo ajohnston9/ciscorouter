@@ -7,14 +7,13 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Runs the scan for a host and holds the results
@@ -64,7 +63,14 @@ public class Scanner implements Callable<HostReport> {
      */
     @Override
     public HostReport call() throws Exception {
-        BufferedReader reader = getConfigFile();
+        BufferedReader reader = null;
+        try {
+            reader = getConfigFile();
+        } catch (JSchException | IOException e) {
+            //We won't have any data on the host, so construct an empty report and throw it back
+            HostReport failedToConnect = new HostReport(host);
+            return failedToConnect;
+        }
         String line = null;
         ArrayList<String> lines = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
@@ -81,9 +87,8 @@ public class Scanner implements Callable<HostReport> {
      * @return A BufferedReader containing the output from the GET_ALL_CONFIG 
      * command 
      */
-    private BufferedReader getConfigFile() {
+    private BufferedReader getConfigFile() throws JSchException, IOException{
         InputStream in = null;
-        try {
             JSch jsch = new JSch();
             Session session = jsch.getSession(
                     host.getUser(),
@@ -95,10 +100,7 @@ public class Scanner implements Callable<HostReport> {
             ChannelExec exec = (ChannelExec) session.openChannel("exec");
             in = exec.getInputStream();
             exec.setCommand(GET_ALL_CONFIG);
-            exec.connect();         
-        } catch (JSchException | IOException ex) {
-            Logger.getLogger(Scanner.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            exec.connect();
         //noinspection ConstantConditions
         return new BufferedReader(new InputStreamReader(in));
     }
