@@ -2,10 +2,11 @@ package ciscoroutertool.gui;
 
 import ciscoroutertool.scanner.FullReport;
 import ciscoroutertool.scanner.ScanManager;
+
+import javax.swing.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.SwingWorker;
 
 /**
  * Runs the scan and retrieves the full report
@@ -42,6 +43,7 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
     @Override
     protected FullReport doInBackground() throws Exception {
         parent.showPleaseWaitDialog();
+        //TODO: Handle any exceptions thrown
         return manager.run();
     }
     
