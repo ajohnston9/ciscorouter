@@ -59,7 +59,7 @@ public class Scanner implements Callable<HostReport> {
     /**
      * Performs the scan and returns a HostReport containing all matched rules.
      * @return The HostReport containing the matched rules.
-     * @throws Exception Any Exception generated during the scan.
+     * @throws Exception Any Unhandled exception generated during the scan.
      */
     @Override
     public HostReport call() throws Exception {
