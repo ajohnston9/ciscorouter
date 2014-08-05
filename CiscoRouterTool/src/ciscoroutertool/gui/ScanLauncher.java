@@ -52,6 +52,7 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
      */
     @Override
     protected void done() {
+        super.done();
         parent.disposePleaseWaitDialog();
         try {
             parent.displayReport(get());
