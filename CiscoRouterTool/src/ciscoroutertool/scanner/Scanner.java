@@ -82,6 +82,7 @@ public class Scanner implements Callable<HostReport> {
         ArrayList<String> lines = new ArrayList<>();
         try {
             while ((line = reader.readLine()) != null) {
+                System.out.println("DEBUG: Line is "  + line);
                 lines.add(line.trim());
             }
         } catch (IOException e) {
@@ -111,7 +112,7 @@ public class Scanner implements Callable<HostReport> {
         session.connect();
         //Enable superuser if its set
         if (host.usesEnable()) {
-            Channel channel = session.openChannel("exec");
+            Channel channel = session.openChannel("shell");
             ((ChannelExec) channel).setCommand(ENABLE_SUPERUSER);
             in = channel.getInputStream();
             OutputStream outputStream = channel.getOutputStream();
