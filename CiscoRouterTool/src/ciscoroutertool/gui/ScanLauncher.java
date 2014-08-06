@@ -43,7 +43,6 @@ public class ScanLauncher extends SwingWorker<FullReport, Object> {
     @Override
     protected FullReport doInBackground() throws Exception {
         parent.showPleaseWaitDialog();
-        //TODO: Handle any exceptions thrown
         return manager.run();
     }
     

@@ -151,7 +151,7 @@ public class NewDeviceDialog extends javax.swing.JFrame {
 
 
     private void sshPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sshPasswordActionPerformed
-        //FIXME: Not used
+        //FIX ME: Not used
     }//GEN-LAST:event_sshPasswordActionPerformed
 
     /**
