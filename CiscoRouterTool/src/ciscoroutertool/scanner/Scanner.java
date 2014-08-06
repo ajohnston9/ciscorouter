@@ -110,12 +110,12 @@ public class Scanner implements Callable<HostReport> {
         //If this line isn't present, every host must be in known_hosts
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
+        Channel channel = session.openChannel("shell");
+        in = channel.getInputStream();
+        OutputStream outputStream = channel.getOutputStream();
+        channel.connect();
         //Enable superuser if its set
         if (host.usesEnable()) {
-            Channel channel = session.openChannel("shell");
-            in = channel.getInputStream();
-            OutputStream outputStream = channel.getOutputStream();
-            channel.connect();
             outputStream.write((ENABLE_SUPERUSER + "\r\n").getBytes());
             //Send the password with a newline (emulating a user pressing "enter"
             outputStream.write((host.getEnablePass() + "\r\n").getBytes());
@@ -124,17 +124,16 @@ public class Scanner implements Callable<HostReport> {
             outputStream.flush();
             outputStream.write((GET_ALL_CONFIG + "\r\n").getBytes());
             outputStream.flush();
+
         } else {
             //Run the command to disable buffering, then get config
-            Channel channel = session.openChannel("shell");
-            in = channel.getInputStream();
-            OutputStream outputStream = channel.getOutputStream();
-            channel.connect();
             outputStream.write((DISABLE_OUTPUT_BUFFERING + "\r\n").getBytes());
             outputStream.flush();
             outputStream.write((GET_ALL_CONFIG+"\r\n").getBytes());
             outputStream.flush();
         }
+        //Kill then channel, then read it?
+        channel.disconnect();
         return new BufferedReader(new InputStreamReader(in));
     }
 
