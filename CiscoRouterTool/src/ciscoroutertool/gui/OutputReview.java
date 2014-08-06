@@ -18,8 +18,19 @@ import java.util.ArrayList;
  */
 public class OutputReview extends javax.swing.JFrame {
 
+    /**
+     * The object holding all individual host reports as well as some global data
+     */
     private FullReport report;
+
+    /**
+     * The selected tree node (used to find nodes to delete)
+     */
     private DefaultMutableTreeNode selected = null;
+
+    /**
+     * The model that the tree is based on.
+     */
     private DefaultTreeModel model;
     
     /**
@@ -30,13 +41,9 @@ public class OutputReview extends javax.swing.JFrame {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
         ArrayList<HostReport> reports = report.getReports();
         for (HostReport h : reports) {
-            System.out.println("DEBUG: Host report for: " + h.getHost().toString());
             DefaultMutableTreeNode host = new DefaultMutableTreeNode(h.getHost().toString());
-            System.out.println("DEBUG: Found " + h.getMatchedRules().size() + " matched rules");
             ArrayList<Rule> matchedRules = h.getMatchedRules();
             for (Rule rule : matchedRules) {
-                System.out.println("\tDEBUG: Matched rule name: " + rule.getName());
-                System.out.println("\tDEBUG: Matched rule description: " + rule.getDescription());
                 DefaultMutableTreeNode ruleName = new DefaultMutableTreeNode(rule.getName());
                 DefaultMutableTreeNode ruleDesc = new DefaultMutableTreeNode(rule.getDescription());
                 ruleName.add(ruleDesc);
@@ -134,6 +141,10 @@ public class OutputReview extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Deletes the selected node from the tree and removes the corresponding entry from the report.
+     * @param evt
+     */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         selected = (DefaultMutableTreeNode) reportTree.getLastSelectedPathComponent();
         if (selected == null) {
@@ -152,7 +163,7 @@ public class OutputReview extends javax.swing.JFrame {
             String host = selected.getParent().toString();
             String rule = selected.toString();
             int hostNum = this.getIndexOfHost(host);
-            int ruleNum = this.getIndexofRule(hostNum, rule);
+            int ruleNum = this.getIndexOfRule(hostNum, rule);
             if (hostNum == -1 || ruleNum == -1) {
                 return;
             }
@@ -166,6 +177,11 @@ public class OutputReview extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    /**
+     * Uses the name of the host to find it's position in the ArrayList of hosts in the FullReport
+     * @param hostname the name of the host to find
+     * @return the index of the host in the array
+     */
     private int getIndexOfHost(String hostname) {
         int toDelete = -1;
         for (int i = 0; i < report.getReports().size(); i++) {
@@ -183,7 +199,13 @@ public class OutputReview extends javax.swing.JFrame {
         return toDelete;
     }
 
-    private int getIndexofRule(int host, String ruleName) {
+    /**
+     * Uses the position of the host in the array and the name of the rule to find the rule's position in the host's report
+     * @param host the index of the host in the FullReport's HostReport ArrayList.
+     * @param ruleName the name of the rule to find the index of
+     * @return the index of the rule.
+     */
+    private int getIndexOfRule(int host, String ruleName) {
         int toDelete = -1;
         for (int i = 0; i < report.getReports().size(); i++) {
             String rule = report.getReports().get(host).getMatchedRules().get(i).toString(); //Get this Host's rules
