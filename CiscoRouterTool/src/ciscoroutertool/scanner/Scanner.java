@@ -113,25 +113,26 @@ public class Scanner implements Callable<HostReport> {
         //Enable superuser if its set
         if (host.usesEnable()) {
             Channel channel = session.openChannel("shell");
-            ((ChannelExec) channel).setCommand(ENABLE_SUPERUSER);
             in = channel.getInputStream();
             OutputStream outputStream = channel.getOutputStream();
             channel.connect();
+            outputStream.write((ENABLE_SUPERUSER + "\r\n").getBytes());
             //Send the password with a newline (emulating a user pressing "enter"
-            outputStream.write((host.getEnablePass() + "\n").getBytes());
+            outputStream.write((host.getEnablePass() + "\r\n").getBytes());
             outputStream.flush();
-            outputStream.write(DISABLE_OUTPUT_BUFFERING.getBytes());
+            outputStream.write((DISABLE_OUTPUT_BUFFERING + "\r\n").getBytes());
             outputStream.flush();
-            outputStream.write(GET_ALL_CONFIG.getBytes());
+            outputStream.write((GET_ALL_CONFIG + "\r\n").getBytes());
             outputStream.flush();
         } else {
             //Run the command to disable buffering, then get config
-            Channel channel = session.openChannel("exec");
-            ((ChannelExec) channel).setCommand(DISABLE_OUTPUT_BUFFERING);
+            Channel channel = session.openChannel("shell");
             in = channel.getInputStream();
             OutputStream outputStream = channel.getOutputStream();
             channel.connect();
-            outputStream.write(GET_ALL_CONFIG.getBytes());
+            outputStream.write((DISABLE_OUTPUT_BUFFERING + "\r\n").getBytes());
+            outputStream.flush();
+            outputStream.write((GET_ALL_CONFIG+"\r\n").getBytes());
             outputStream.flush();
         }
         return new BufferedReader(new InputStreamReader(in));
