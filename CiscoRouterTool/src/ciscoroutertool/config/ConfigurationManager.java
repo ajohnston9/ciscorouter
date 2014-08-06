@@ -59,7 +59,17 @@ public class ConfigurationManager {
                 user = host.getFirstChildElement("Username").getValue();
                 pass = host.getFirstChildElement("Password").getValue();
                 InetAddress address = InetAddress.getByName(ip);
-                _hosts.add(new Host(address, user, pass));
+
+                //Check if there is a superuser password
+                Element superuser = host.getFirstChildElement("ElevatePassword");
+                if (superuser == null) {
+                    _hosts.add(new Host(address, user, pass));
+                } else {
+                    Host h = new Host(address, user, pass);
+                    h.setEnable(true);
+                    h.setEnablePass(superuser.getValue());
+                    _hosts.add(h);
+                }
             }
             
         } catch (ParsingException | IOException ex) {
@@ -111,6 +121,12 @@ public class ConfigurationManager {
             Element password = new Element("Password");
             password.appendChild(h.getPass());
             host.appendChild(password);
+
+            if(h.usesEnable()) {
+                Element superuser = new Element("ElevatePassword");
+                superuser.appendChild(h.getEnablePass());
+                host.appendChild(superuser);
+            }
 
             root.appendChild(host);
         }
