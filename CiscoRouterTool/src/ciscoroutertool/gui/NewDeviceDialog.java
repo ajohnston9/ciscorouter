@@ -46,6 +46,9 @@ public class NewDeviceDialog extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         sshUsername = new javax.swing.JTextField();
         sshPassword = new javax.swing.JPasswordField();
+        checkNeedsEnable = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
+        enablePassword = new javax.swing.JPasswordField();
 
         jButton1.setText("jButton1");
 
@@ -81,6 +84,17 @@ public class NewDeviceDialog extends javax.swing.JFrame {
             }
         });
 
+        checkNeedsEnable.setText("This router requires superuser privileges");
+        checkNeedsEnable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkNeedsEnableActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Superuser password: ");
+
+        enablePassword.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,20 +110,27 @@ public class NewDeviceDialog extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(fieldIPAddr))
+                            .addComponent(fieldIPAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                             .addGap(10, 10, 10)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(sshUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                                .addComponent(sshPassword)))))
+                                .addComponent(checkNeedsEnable)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(sshUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(sshPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(enablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -131,7 +152,13 @@ public class NewDeviceDialog extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(sshPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkNeedsEnable)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(enablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCloseButton)
                     .addComponent(btnAddDevice))
@@ -169,14 +196,29 @@ public class NewDeviceDialog extends javax.swing.JFrame {
         }
         String username = sshUsername.getText();
         String password = new String(sshPassword.getPassword());
-        parent.updateTable(new Host(hostname, username, password));
+        Host newHost = new Host(hostname, username, password);
+        if (checkNeedsEnable.isSelected()) {
+            newHost.setEnable(true);
+            newHost.setEnablePass(new String(enablePassword.getPassword()));
+        }
+        parent.updateTable(newHost);
         this.dispose();
     }//GEN-LAST:event_btnAddDeviceActionPerformed
+
+    /**
+     * Handles the click of the "Needs superuser privileges" box
+     * @param evt 
+     */
+    private void checkNeedsEnableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkNeedsEnableActionPerformed
+        enablePassword.setEnabled(checkNeedsEnable.isSelected());
+    }//GEN-LAST:event_checkNeedsEnableActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDevice;
     private javax.swing.JButton btnCloseButton;
+    private javax.swing.JCheckBox checkNeedsEnable;
+    private javax.swing.JPasswordField enablePassword;
     private javax.swing.JTextField fieldIPAddr;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -184,6 +226,7 @@ public class NewDeviceDialog extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPasswordField sshPassword;
     private javax.swing.JTextField sshUsername;
     // End of variables declaration//GEN-END:variables
