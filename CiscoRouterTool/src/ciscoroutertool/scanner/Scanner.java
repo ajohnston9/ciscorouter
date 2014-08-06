@@ -5,10 +5,7 @@ import ciscoroutertool.scanner.parser.RouterConfigManager;
 import ciscoroutertool.utils.Host;
 import com.jcraft.jsch.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
@@ -38,6 +35,16 @@ public class Scanner implements Callable<HostReport> {
      * The command to get the full configuration file from the device.
      */
     private static final String GET_ALL_CONFIG = "show running-config full";
+
+    /**
+     * The command to enable superuser privileges
+     */
+    private static final String ENABLE_SUPERUSER = "enable";
+
+    /**
+     * The command to disable the use of "more" to pipe the config file
+     */
+    private static final String DISABLE_OUTPUT_BUFFERING = "terminal length 0";
     
     /**
      * The host that the Scanner object will scan.
@@ -102,11 +109,30 @@ public class Scanner implements Callable<HostReport> {
         //If this line isn't present, every host must be in known_hosts
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
-        //Run the command that gets the config
-        Channel channel=session.openChannel("exec");
-        ((ChannelExec)channel).setCommand(GET_ALL_CONFIG);
-        in = channel.getInputStream();
-        channel.connect();
+        //Enable superuser if its set
+        if (host.usesEnable()) {
+            Channel channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(ENABLE_SUPERUSER);
+            in = channel.getInputStream();
+            OutputStream outputStream = channel.getOutputStream();
+            channel.connect();
+            //Send the password with a newline (emulating a user pressing "enter"
+            outputStream.write((host.getEnablePass() + "\n").getBytes());
+            outputStream.flush();
+            outputStream.write(DISABLE_OUTPUT_BUFFERING.getBytes());
+            outputStream.flush();
+            outputStream.write(GET_ALL_CONFIG.getBytes());
+            outputStream.flush();
+        } else {
+            //Run the command to disable buffering, then get config
+            Channel channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(DISABLE_OUTPUT_BUFFERING);
+            in = channel.getInputStream();
+            OutputStream outputStream = channel.getOutputStream();
+            channel.connect();
+            outputStream.write(GET_ALL_CONFIG.getBytes());
+            outputStream.flush();
+        }
         return new BufferedReader(new InputStreamReader(in));
     }
 
