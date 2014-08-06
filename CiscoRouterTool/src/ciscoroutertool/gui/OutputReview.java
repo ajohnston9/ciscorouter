@@ -135,11 +135,28 @@ public class OutputReview extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        //TODO: Remove relevant HostReport from FullReport
         selected = (DefaultMutableTreeNode) reportTree.getLastSelectedPathComponent();
         if (selected == null) {
             //Nothing is selected
             return;
+        }
+        //If it's a host
+        if (selected.getPath().length == 2) {
+            String hostname = selected.toString();
+            int toDelete = this.getIndexOfHost(hostname);
+            if (toDelete == -1) {
+                return;
+            }
+            report.getReports().remove(toDelete);
+        } else if (selected.getPath().length == 3) { //If it's a rule
+            String host = selected.getParent().toString();
+            String rule = selected.toString();
+            int hostNum = this.getIndexOfHost(host);
+            int ruleNum = this.getIndexofRule(hostNum, rule);
+            if (hostNum == -1 || ruleNum == -1) {
+                return;
+            }
+            report.getReports().get(hostNum).getMatchedRules().remove(ruleNum);
         }
         MutableTreeNode parent = (MutableTreeNode) selected.getParent();
         int index = parent.getIndex(selected);
@@ -148,6 +165,40 @@ public class OutputReview extends javax.swing.JFrame {
         reportTree.setModel(model);
 
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private int getIndexOfHost(String hostname) {
+        int toDelete = -1;
+        for (int i = 0; i < report.getReports().size(); i++) {
+            String host = report.getReports().get(i).toString(); //Get this HostReport's host
+            if (hostname.compareTo(host) == 0) {
+                toDelete = i;
+                break;
+            }
+        }
+        //While this should *never* happen, it's safer to do it this way
+        if (toDelete == -1) {
+        } else { //We have an error, let's provide debugging information
+            System.err.println("ERROR: Tried to delete host " + hostname + " but couldn't find it.");
+        }
+        return toDelete;
+    }
+
+    private int getIndexofRule(int host, String ruleName) {
+        int toDelete = -1;
+        for (int i = 0; i < report.getReports().size(); i++) {
+            String rule = report.getReports().get(host).getMatchedRules().get(i).toString(); //Get this Host's rules
+            if (rule.compareTo(ruleName) == 0) {
+                toDelete = i;
+                break;
+            }
+        }
+        //While this should *never* happen, it's safer to do it this way
+        if (toDelete == -1) {
+            System.err.println("ERROR: Tried to delete rule " + ruleName + "on host " +
+                    report.getReports().get(host).toString() + " but couldn't find it.");
+        }
+        return toDelete;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCSV;
