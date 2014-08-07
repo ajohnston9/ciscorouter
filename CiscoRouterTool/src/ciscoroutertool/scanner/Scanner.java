@@ -81,6 +81,7 @@ public class Scanner implements Callable<HostReport> {
         };
 
         prompts = new ArrayList<Match>();
+        commands = new ArrayList<>();
         try {
             prompts.add(new RegExpMatch("(.*)>", closure));
             if (host.usesEnable()) {
