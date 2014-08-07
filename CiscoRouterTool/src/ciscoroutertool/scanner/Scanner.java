@@ -3,10 +3,18 @@ package ciscoroutertool.scanner;
 import ciscoroutertool.rules.Rule;
 import ciscoroutertool.scanner.parser.RouterConfigManager;
 import ciscoroutertool.utils.Host;
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+import expect4j.Closure;
+import expect4j.Expect4j;
+import expect4j.ExpectState;
+import expect4j.matches.Match;
+import expect4j.matches.RegExpMatch;
 
-import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -50,13 +58,42 @@ public class Scanner implements Callable<HostReport> {
      * The host that the Scanner object will scan.
      */
     private final Host host;
-    
+
+    private List<String> commands;
+    private List<Match> prompts;
+    private Closure closure;
+    private StringBuffer buffer = new StringBuffer();
+    private static final int COMMAND_SUCCESS_OPCODE = -2;
+    private static final String ENTER_BUTTON = "\r\n";
+    private static final String PASSWORD_PROMPT = "Password:";
+
     /**
      * Initializes the scanner.
      * @param h The host to be scanned
      */
     public Scanner(Host h) {
         host = h;
+        closure = new Closure() {
+            @Override
+            public void run(ExpectState expectState) throws Exception {
+                buffer.append(expectState.getBuffer());
+            }
+        };
+
+        prompts = new ArrayList<Match>();
+        try {
+            prompts.add(new RegExpMatch("(.*)>", closure));
+            if (host.usesEnable()) {
+                commands.add(ENABLE_SUPERUSER);
+                commands.add(host.getEnablePass());
+                prompts.add(new RegExpMatch(PASSWORD_PROMPT, closure));
+            }
+            prompts.add(new RegExpMatch("#", closure));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        commands.add(DISABLE_OUTPUT_BUFFERING);
+        commands.add(GET_ALL_CONFIG);
     }
 
 
@@ -67,10 +104,10 @@ public class Scanner implements Callable<HostReport> {
      */
     @Override
     public HostReport call()  {
-        BufferedReader reader = null;
+        ArrayList<String> configlines = null;
         try {
-            reader = getConfigFile();
-        } catch (JSchException | IOException e) {
+            configlines = getConfigFile();
+        } catch (Exception e) {
             System.err.println("Failed to connect to host " + host.getAddress().toString() + ". Please check " +
                 "URL and credentials and rerun.");
             System.err.println("The exact error was: " + e.getMessage());
@@ -78,29 +115,21 @@ public class Scanner implements Callable<HostReport> {
             HostReport failedToConnect = new HostReport(host);
             return failedToConnect;
         }
-        String line = null;
-        ArrayList<String> lines = new ArrayList<>();
-        try {
-            while ((line = reader.readLine()) != null) {
-                System.out.println("DEBUG: Line is "  + line);
-                lines.add(line.trim());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String line : configlines) {
+            System.out.println("DEBUG: Found line: " + line);
         }
         ArrayList<String> activeLines = 
-                RouterConfigManager.getActiveConfig(lines);
+                RouterConfigManager.getActiveConfig(configlines);
         return getHostReport(activeLines);
     }
     
     /**
      * Connects to the device and retrieves the configuration file from the 
      * device.
-     * @return A BufferedReader containing the output from the GET_ALL_CONFIG 
+     * @return A ArrayList containing the output from the GET_ALL_CONFIG
      * command 
      */
-    private BufferedReader getConfigFile() throws JSchException, IOException{
-        InputStream in = null;
+    private ArrayList<String> getConfigFile() throws Exception {
         JSch jsch = new JSch();
         Session session = jsch.getSession(
                 host.getUser(),
@@ -111,30 +140,21 @@ public class Scanner implements Callable<HostReport> {
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
         Channel channel = session.openChannel("shell");
-        in = channel.getInputStream();
-        OutputStream outputStream = channel.getOutputStream();
-        channel.connect();
-        //Enable superuser if its set
-        if (host.usesEnable()) {
-            outputStream.write((ENABLE_SUPERUSER + "\r\n").getBytes());
-            //Send the password with a newline (emulating a user pressing "enter"
-            outputStream.write((host.getEnablePass() + "\r\n").getBytes());
-            outputStream.flush();
-            outputStream.write((DISABLE_OUTPUT_BUFFERING + "\r\n").getBytes());
-            outputStream.flush();
-            outputStream.write((GET_ALL_CONFIG + "\r\n").getBytes());
-            outputStream.flush();
-
-        } else {
-            //Run the command to disable buffering, then get config
-            outputStream.write((DISABLE_OUTPUT_BUFFERING + "\r\n").getBytes());
-            outputStream.flush();
-            outputStream.write((GET_ALL_CONFIG+"\r\n").getBytes());
-            outputStream.flush();
+        Expect4j expect = new Expect4j(channel.getInputStream(), channel.getOutputStream());
+        for(String command : commands) {
+            int returnVal = expect.expect(prompts);
+            if (returnVal != COMMAND_SUCCESS_OPCODE) {
+                System.err.println("ERROR: tried to run " + command + " and got opcode " + returnVal);
+            }
+            expect.send(command);
+            expect.send(ENTER_BUTTON);
         }
-        //Kill then channel, then read it?
+        ArrayList<String> lines =new ArrayList<>(Arrays.asList(buffer.toString().split("\n")));
+        expect.close();
         channel.disconnect();
-        return new BufferedReader(new InputStreamReader(in));
+        session.disconnect();
+        return lines;
+
     }
 
     /**
