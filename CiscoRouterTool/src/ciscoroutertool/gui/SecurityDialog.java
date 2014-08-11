@@ -141,9 +141,13 @@ public class SecurityDialog extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        String username = fieldUsername.getText();
-        String password = new String(fieldPassword.getPassword());
-        MainGUI.settingsManager.setAuth(username, password);
+        if (radioEnableSecurity.isSelected()) {
+            String username = fieldUsername.getText();
+            String password = new String(fieldPassword.getPassword());
+            MainGUI.settingsManager.setAuth(username, password);
+        } else {
+            MainGUI.settingsManager.removeSecurity();
+        }
         this.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 

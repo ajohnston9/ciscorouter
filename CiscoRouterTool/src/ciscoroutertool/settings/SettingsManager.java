@@ -8,6 +8,7 @@ import nu.xom.ParsingException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Level;
@@ -67,6 +68,21 @@ public class SettingsManager {
      */
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Deletes the settings file if auth is turned off
+     */
+    public void removeSecurity() {
+        requiresAuth = false;
+        File f = new File(System.getProperty("user.dir") + "/settings/settings.xml");
+        if (f.exists()) {
+            try {
+                Files.deleteIfExists(f.toPath());
+            } catch (IOException e) {
+                //Fail silently
+            }
+        }
     }
 
     /**
