@@ -61,6 +61,20 @@ public class SettingsManager {
     public boolean requiresAuth() {
         return requiresAuth;
     }
+
+    /**
+     * Returns the username needed to access the app
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Returns the password needed to access the app
+     */
+    public String getPassword() {
+        return password;
+    }
     
     /**
      * Checks the provided credentials against stored counterparts
@@ -88,7 +102,7 @@ public class SettingsManager {
         String hashedPassword;
         try {
             hashedPassword = PasswordHash.createHash(_password);
-            File settingsFile = new File(System.getProperty("user.dir" + "/settings/settings.xml"));
+            File settingsFile = new File(System.getProperty("user.dir") + "/settings/settings.xml");
             FileWriter fw = new FileWriter(settingsFile, false);
 
             Element root = new Element("Settings");
@@ -101,9 +115,17 @@ public class SettingsManager {
             pass.appendChild(hashedPassword);
             root.appendChild(pass);
 
+            Document doc = new Document(root);
+            fw.write(doc.toXML());
+            fw.flush();
+            fw.close();
+
         } catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException ex) {
             Logger.getLogger(SettingsManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        requiresAuth = true;
+        username = _username;
+        password = _password;
     }
 
 }

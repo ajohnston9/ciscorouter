@@ -10,10 +10,18 @@ import javax.swing.JOptionPane;
 public class AuthDialog extends javax.swing.JFrame {
 
     /**
+     * The parent window
+     */
+    private MainGUI parent;
+
+    /**
      * Creates new form AuthDialog
      */
-    public AuthDialog() {
+    public AuthDialog(MainGUI _parent) {
         initComponents();
+        parent = _parent;
+        parent.setVisible(false);
+
     }
 
     /**
@@ -120,7 +128,8 @@ public class AuthDialog extends javax.swing.JFrame {
         String username = fieldUsername.getText().trim();
         String password = new String(fieldPassword.getPassword());
         if (MainGUI.settingsManager.checkAuth(username, password)) {
-            this.setVisible(false);
+            parent.setVisible(true);
+            this.dispose();
         }
         else {
             JOptionPane.showMessageDialog(this,

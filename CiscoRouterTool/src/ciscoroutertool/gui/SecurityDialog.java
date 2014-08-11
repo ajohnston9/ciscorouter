@@ -12,7 +12,17 @@ public class SecurityDialog extends javax.swing.JFrame {
      */
     public SecurityDialog() {
         initComponents();
+        radioDisableSecurity.setSelected(true);
+    }
+
+    /**
+     * Creates new form SecurityDialog
+     */
+    public SecurityDialog(String username, String pass) {
+        initComponents();
         radioEnableSecurity.setSelected(true);
+        fieldUsername.setText(username);
+        fieldPassword.setText(pass);
     }
 
     /**
@@ -134,6 +144,7 @@ public class SecurityDialog extends javax.swing.JFrame {
         String username = fieldUsername.getText();
         String password = new String(fieldPassword.getPassword());
         MainGUI.settingsManager.setAuth(username, password);
+        this.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void radioDisableSecurityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioDisableSecurityActionPerformed

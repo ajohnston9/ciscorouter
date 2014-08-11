@@ -62,8 +62,10 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         initComponents();
         fc.setFileFilter(filter);
         if (settingsManager.requiresAuth()) {
-            AuthDialog auth = new AuthDialog();
+            AuthDialog auth = new AuthDialog(this);
+            this.setVisible(false);
             auth.setVisible(true);
+            auth.setAlwaysOnTop(true);
         }
     }
 
