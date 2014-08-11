@@ -13,6 +13,8 @@ public class SecurityDialog extends javax.swing.JFrame {
     public SecurityDialog() {
         initComponents();
         radioDisableSecurity.setSelected(true);
+        fieldUsername.setEnabled(false);
+        fieldPassword.setEnabled(false);
     }
 
     /**
