@@ -60,7 +60,6 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      */
     public MainGUI() {
         initComponents();
-        System.out.println(System.getProperty("user.dir"));
         fc.setFileFilter(filter);
         if (settingsManager.requiresAuth()) {
             AuthDialog auth = new AuthDialog();
