@@ -128,6 +128,7 @@ public class AuthDialog extends javax.swing.JFrame {
         String password = new String(fieldPassword.getPassword());
         if (MainGUI.settingsManager.checkAuth(username, password)) {
             parent.setVisible(true);
+            parent.setEnabled(true);
             this.dispose();
         }
         else {

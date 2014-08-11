@@ -63,7 +63,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         fc.setFileFilter(filter);
         if (settingsManager.requiresAuth()) {
             AuthDialog auth = new AuthDialog(this);
-            this.setVisible(false);
+            this.setEnabled(false);
             auth.setVisible(true);
             auth.setAlwaysOnTop(true);
         }
@@ -254,8 +254,14 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      * @param evt The ActionEvent object with relevant data
      */
     private void menuSecurityChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSecurityChangeActionPerformed
-        SecurityDialog secDialog = new SecurityDialog();
-        secDialog.setVisible(true);
+        if (settingsManager.requiresAuth()) {
+            SecurityDialog securityDialog =
+                    new SecurityDialog(settingsManager.getUsername(), settingsManager.getPassword());
+            securityDialog.setVisible(true);
+        } else {
+            SecurityDialog secDialog = new SecurityDialog();
+            secDialog.setVisible(true);
+        }
     }//GEN-LAST:event_menuSecurityChangeActionPerformed
 
     /**
