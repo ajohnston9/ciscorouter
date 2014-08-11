@@ -6,16 +6,16 @@ import ciscoroutertool.utils.Host;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import expect4j.Closure;
-import expect4j.Expect4j;
-import expect4j.ExpectState;
-import expect4j.matches.Match;
-import expect4j.matches.RegExpMatch;
+import net.sf.expectit.Expect;
+import net.sf.expectit.ExpectBuilder;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
+
+import static net.sf.expectit.matcher.Matchers.contains;
 
 /**
  * Runs the scan for a host and holds the results
@@ -59,12 +59,6 @@ public class Scanner implements Callable<HostReport> {
      */
     private final Host host;
 
-    private List<String> commands;
-    private List<Match> prompts;
-    private Closure closure;
-    private StringBuffer buffer = new StringBuffer();
-    private static final int COMMAND_SUCCESS_OPCODE = -2;
-    private static final String ENTER_BUTTON = "\r\n";
     private static final String PASSWORD_PROMPT = "Password:";
 
     /**
@@ -73,28 +67,6 @@ public class Scanner implements Callable<HostReport> {
      */
     public Scanner(Host h) {
         host = h;
-        closure = new Closure() {
-            @Override
-            public void run(ExpectState expectState) throws Exception {
-                buffer.append(expectState.getBuffer());
-            }
-        };
-
-        prompts = new ArrayList<Match>();
-        commands = new ArrayList<>();
-        try {
-            prompts.add(new RegExpMatch("(.*)>", closure));
-            if (host.usesEnable()) {
-                commands.add(ENABLE_SUPERUSER);
-                commands.add(host.getEnablePass());
-                prompts.add(new RegExpMatch(PASSWORD_PROMPT, closure));
-            }
-            prompts.add(new RegExpMatch("#", closure));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        commands.add(DISABLE_OUTPUT_BUFFERING);
-        commands.add(GET_ALL_CONFIG);
     }
 
 
@@ -109,15 +81,12 @@ public class Scanner implements Callable<HostReport> {
         try {
             configlines = getConfigFile();
         } catch (Exception e) {
-            System.err.println("Failed to connect to host " + host.getAddress().toString() + ". Please check " +
+            System.err.println("Failed to connect to host " + host.toString() + ". Please check " +
                 "URL and credentials and rerun.");
             System.err.println("The exact error was: " + e.getMessage());
             //We won't have any data on the host, so construct an empty report and throw it back
             HostReport failedToConnect = new HostReport(host);
             return failedToConnect;
-        }
-        for (String line : configlines) {
-            System.out.println("DEBUG: Found line: " + line);
         }
         ArrayList<String> activeLines = 
                 RouterConfigManager.getActiveConfig(configlines);
@@ -130,32 +99,45 @@ public class Scanner implements Callable<HostReport> {
      * @return A ArrayList containing the output from the GET_ALL_CONFIG
      * command 
      */
-    private ArrayList<String> getConfigFile() throws Exception {
+    private ArrayList<String> getConfigFile()  throws Exception{
         JSch jsch = new JSch();
+        InputStream in = null;
         Session session = jsch.getSession(
                 host.getUser(),
-                host.getAddress().getHostAddress(),
+                host.toString(),
                 SSH_PORT);
         session.setPassword(host.getPass());
         //If this line isn't present, every host must be in known_hosts
         session.setConfig("StrictHostKeyChecking", "no");
         session.connect();
         Channel channel = session.openChannel("shell");
-        Expect4j expect = new Expect4j(channel.getInputStream(), channel.getOutputStream());
-        for(String command : commands) {
-            int returnVal = expect.expect(prompts);
-            if (returnVal != COMMAND_SUCCESS_OPCODE) {
-                System.err.println("ERROR: tried to run " + command + " and got opcode " + returnVal);
-            }
-            expect.send(command);
-            expect.send(ENTER_BUTTON);
+        in = channel.getInputStream();
+        OutputStream outputStream = channel.getOutputStream();
+        Expect expect = new ExpectBuilder()
+                .withOutput(outputStream)
+                .withInputs(channel.getInputStream(), channel.getExtInputStream())
+                        //.withEchoOutput(System.out)
+                        //.withEchoInput(System.out)
+                .build();
+
+        channel.connect();
+        if (host.usesEnable()) {
+            expect.expect(contains(">"));
+            expect.sendLine(ENABLE_SUPERUSER);
+            expect.expect(contains(PASSWORD_PROMPT));
+            expect.sendLine(host.getEnablePass());
         }
-        ArrayList<String> lines =new ArrayList<>(Arrays.asList(buffer.toString().split("\n")));
-        expect.close();
+        expect.expect(contains("#")); //#
+        expect.sendLine(DISABLE_OUTPUT_BUFFERING); //terminal length 0
+        expect.expect(contains("#")); //#
+        expect.sendLine(GET_ALL_CONFIG); //show running-config full
+        String result = expect.expect(contains("#")).getBefore(); //#
         channel.disconnect();
         session.disconnect();
+        expect.close();
+        String[] arrLines = result.split("\n");
+        ArrayList<String> lines = new ArrayList<>(Arrays.asList(arrLines));
         return lines;
-
     }
 
     /**

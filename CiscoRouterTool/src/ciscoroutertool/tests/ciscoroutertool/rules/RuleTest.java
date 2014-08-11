@@ -24,8 +24,14 @@ public class RuleTest {
     public void ruleShouldMatchRegex() throws Exception {
         String[] sett  = {"enable secret "};
         String[] param = {"(.*)"};
+        String willThisLineMatch        = "enable secret 5 $1$3456ygre4356yh\r\n";
+        String will2 = willThisLineMatch.trim();
+        String will3 = will2.trim();
         Rule testrule = new Rule("Sample Rule", "Sample Description", "High", sett, param);
         assertTrue("Regex should match!", testrule.matchesRule("enable secret supersecret"));
+        assertTrue("Regex should match!", testrule.matchesRule(willThisLineMatch));
+        assertTrue("Regex should match!", testrule.matchesRule(will2));
+        assertTrue("Regex should match!", testrule.matchesRule(will3));
     }
 
     @Test

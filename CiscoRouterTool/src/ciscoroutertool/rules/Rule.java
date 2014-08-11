@@ -79,6 +79,7 @@ public class Rule {
         boolean[] matches = new boolean[settings.length];
         String[] configLines = config.split("\n"); 
         for (String line : configLines) {
+            line = line.trim();
             for (int i = 0; i < settings.length; i++) {
                 Matcher matchSetting = settPattern[i].matcher(line);
                 Matcher matchParam   = paramPattern[i].matcher(line);
@@ -111,6 +112,7 @@ public class Rule {
         boolean[] matches = new boolean[settings.length];
         int i = 0; //shows which part of the rule we're testing
         for (String line : config) {
+            line = line.trim();
             if (line.matches(settings[i] + "(.*)")) {
                //Check if it matches the param
                if (line.matches("(.*)" + params[i])) {
