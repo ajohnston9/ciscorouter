@@ -31,11 +31,11 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
+                              <Component id="btnXML" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnCSV" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnCSV1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnHTML1" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnTXT" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="treeScrollPane" min="-2" pref="649" max="-2" attributes="0"/>
@@ -63,9 +63,9 @@
               <Component id="treeScrollPane" min="-2" pref="232" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnHTML1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCSV1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnTXT" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCSV" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnXML" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="23" max="32767" attributes="0"/>
           </Group>
@@ -86,20 +86,29 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnCSV">
+    <Component class="javax.swing.JButton" name="btnXML">
       <Properties>
         <Property name="text" type="java.lang.String" value="Output to XML"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnXMLActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnHTML1">
+    <Component class="javax.swing.JButton" name="btnTXT">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Output to HTML"/>
+        <Property name="text" type="java.lang.String" value="Output to TXT"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTXTActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnCSV1">
+    <Component class="javax.swing.JButton" name="btnCSV">
       <Properties>
         <Property name="text" type="java.lang.String" value="Output to CSV"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCSVActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="treeScrollPane">
 

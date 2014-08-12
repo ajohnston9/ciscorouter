@@ -71,9 +71,9 @@ public class OutputReview extends javax.swing.JFrame {
 
         lblPrompt = new javax.swing.JLabel();
         btnDelete = new javax.swing.JButton();
+        btnXML = new javax.swing.JButton();
+        btnTXT = new javax.swing.JButton();
         btnCSV = new javax.swing.JButton();
-        btnHTML1 = new javax.swing.JButton();
-        btnCSV1 = new javax.swing.JButton();
         treeScrollPane = new javax.swing.JScrollPane();
         reportTree = new javax.swing.JTree();
 
@@ -89,11 +89,26 @@ public class OutputReview extends javax.swing.JFrame {
             }
         });
 
-        btnCSV.setText("Output to XML");
+        btnXML.setText("Output to XML");
+        btnXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXMLActionPerformed(evt);
+            }
+        });
 
-        btnHTML1.setText("Output to HTML");
+        btnTXT.setText("Output to TXT");
+        btnTXT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTXTActionPerformed(evt);
+            }
+        });
 
-        btnCSV1.setText("Output to CSV");
+        btnCSV.setText("Output to CSV");
+        btnCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCSVActionPerformed(evt);
+            }
+        });
 
         treeScrollPane.setViewportView(reportTree);
 
@@ -108,11 +123,11 @@ public class OutputReview extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnXML)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCSV)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCSV1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHTML1))
+                                .addComponent(btnTXT))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(treeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 649, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
@@ -132,9 +147,9 @@ public class OutputReview extends javax.swing.JFrame {
                 .addComponent(treeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnHTML1)
-                    .addComponent(btnCSV1)
-                    .addComponent(btnCSV))
+                    .addComponent(btnTXT)
+                    .addComponent(btnCSV)
+                    .addComponent(btnXML))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -176,6 +191,18 @@ public class OutputReview extends javax.swing.JFrame {
         reportTree.setModel(model);
 
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXMLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnXMLActionPerformed
+
+    private void btnCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCSVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCSVActionPerformed
+
+    private void btnTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTXTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTXTActionPerformed
 
     /**
      * Uses the name of the host to find it's position in the ArrayList of hosts in the FullReport
@@ -224,9 +251,9 @@ public class OutputReview extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCSV;
-    private javax.swing.JButton btnCSV1;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnHTML1;
+    private javax.swing.JButton btnTXT;
+    private javax.swing.JButton btnXML;
     private javax.swing.JLabel lblPrompt;
     private javax.swing.JTree reportTree;
     private javax.swing.JScrollPane treeScrollPane;
