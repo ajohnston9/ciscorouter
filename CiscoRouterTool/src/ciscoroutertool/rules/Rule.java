@@ -148,4 +148,12 @@ public class Rule {
     public String getDescription() {
         return description;
     }
+
+    /**
+     * Returns the severity of the Rule
+     * @return the severity of the rule as a String
+     */
+    public String getSeverity() {
+        return severity;
+    }
 }

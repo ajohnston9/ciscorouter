@@ -1,13 +1,17 @@
 package ciscoroutertool.gui;
 
+import ciscoroutertool.output.OutputManager;
 import ciscoroutertool.rules.Rule;
 import ciscoroutertool.scanner.FullReport;
 import ciscoroutertool.scanner.HostReport;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -32,6 +36,11 @@ public class OutputReview extends javax.swing.JFrame {
      * The model that the tree is based on.
      */
     private DefaultTreeModel model;
+
+    /**
+     * The modal that handles saving files
+     */
+    private JFileChooser fileChooser = new JFileChooser();
     
     /**
      * Creates new form OutputReview
@@ -193,16 +202,32 @@ public class OutputReview extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXMLActionPerformed
-        // TODO add your handling code here:
+        this.genericSaveToFile("xml", OutputManager.XML_OUTPUT);
     }//GEN-LAST:event_btnXMLActionPerformed
 
     private void btnCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCSVActionPerformed
-        // TODO add your handling code here:
+        this.genericSaveToFile("csv", OutputManager.CSV_OUTPUT);
     }//GEN-LAST:event_btnCSVActionPerformed
 
     private void btnTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTXTActionPerformed
-        // TODO add your handling code here:
+        this.genericSaveToFile("txt", OutputManager.TEXT_OUTPUT);
     }//GEN-LAST:event_btnTXTActionPerformed
+
+    private void genericSaveToFile(String extension, int saveType) {
+        int returnCode = fileChooser.showSaveDialog(this);
+        try {
+            if (returnCode == JFileChooser.APPROVE_OPTION) {
+                File saveFile = fileChooser.getSelectedFile();
+                saveFile = this.ensureFileExtensionPresent(saveFile, extension);
+                OutputManager manager = new OutputManager(report, saveFile, saveType);
+                manager.saveFile();
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error",
+                    "Tried to save file and got exception: " + e.getMessage(),
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * Uses the name of the host to find it's position in the ArrayList of hosts in the FullReport
@@ -247,6 +272,14 @@ public class OutputReview extends javax.swing.JFrame {
                     report.getReports().get(host).toString() + " but couldn't find it.");
         }
         return toDelete;
+    }
+
+    private File ensureFileExtensionPresent(File file, String extension) {
+        if (file.getName().toLowerCase().matches("(.*)\\." + extension)) { //If file is already correct
+            return file;
+        }
+        File retFile = new File(file.getPath() + "." + extension);
+        return retFile;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

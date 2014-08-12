@@ -7,6 +7,7 @@ import ciscoroutertool.output.formats.XMLOutputRenderer;
 import ciscoroutertool.scanner.FullReport;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Handles the creation of output
@@ -40,7 +41,11 @@ public class OutputManager {
             default:
                 throw new IllegalArgumentException("Format must be a supported type!");
         }
-        //TODO: Process output
+        renderer.addFullReport(report);
+    }
+
+    public void saveFile() throws IOException {
+        renderer.writeToFile();
     }
 
 }

@@ -1,8 +1,10 @@
 package ciscoroutertool.output.formats;
 
+import ciscoroutertool.scanner.FullReport;
 import ciscoroutertool.scanner.HostReport;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Contains the basic methods to save a FullReport in a specified format
@@ -31,8 +33,15 @@ public abstract class AbstractOutputRenderer {
     public abstract void addHostReport(HostReport hostReport);
 
     /**
+     * Adds a FullReport object to the output buffer
+     * @param fullReport The FullReport object to add
+     */
+    public abstract void addFullReport(FullReport fullReport);
+
+
+    /**
      * Writes the data to the Output file
      */
-    public abstract void writeToFile();
+    public abstract void writeToFile() throws IOException;
 
 }
