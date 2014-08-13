@@ -316,6 +316,7 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
             ScanManager manager = new ScanManager(this.getHostsToScan());
             ScanLauncher launcher = new ScanLauncher(this, manager);
             launcher.execute();
+            btnRunScan.setSelected(false);
         }
         
     }//GEN-LAST:event_btnRunScanActionPerformed

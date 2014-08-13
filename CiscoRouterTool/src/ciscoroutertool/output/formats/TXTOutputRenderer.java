@@ -33,8 +33,9 @@ public class TXTOutputRenderer extends AbstractOutputRenderer {
      */
     @Override
     public void addHostReport(HostReport hostReport) {
-        reportBuilder.append("\n\nHost: " + hostReport.getHost() + System.lineSeparator());
-        reportBuilder.append("Scan Type: Full Scan\n"); //Add in dynamic part when we add that feature
+        reportBuilder.append(System.lineSeparator() +
+                System.lineSeparator() +"Host: " + hostReport.getHost() + System.lineSeparator());
+        reportBuilder.append("Scan Type: Full Scan" + System.lineSeparator()); //Add in dynamic part when we add that feature
         ArrayList<Rule> rules = hostReport.getMatchedRules();
         for (Rule rule : rules) {
             reportBuilder.append("Rule Name: " + rule.getName() + System.lineSeparator());

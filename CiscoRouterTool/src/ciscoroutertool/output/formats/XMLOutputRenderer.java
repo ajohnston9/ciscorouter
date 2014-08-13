@@ -40,7 +40,10 @@ public class XMLOutputRenderer extends AbstractOutputRenderer {
     public void addHostReport(HostReport hostReport) {
         ArrayList<Rule> rules = hostReport.getMatchedRules();
         Element host = new Element("Host");
-        host.appendChild(host.toString());
+
+        Element ip = new Element("IP");
+        ip.appendChild(String.valueOf(hostReport.getHost()));
+        host.appendChild(ip);
 
         Element scanType = new Element("ScanType");
         scanType.appendChild("Full Scan");

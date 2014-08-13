@@ -36,7 +36,7 @@ public class CSVOutputRenderer extends AbstractOutputRenderer {
         ArrayList<Rule> rules = hostReport.getMatchedRules();
         String stub = hostReport.getHost().toString() + ",Full Scan,";
         for (Rule rule : rules) {
-            reportBuilder.append(stub + rule.getName() + "," +"," + rule.getDescription() +
+            reportBuilder.append(stub + rule.getName() + "," + rule.getSeverity() +"," + rule.getDescription() +
                     System.lineSeparator());
         }
     }
