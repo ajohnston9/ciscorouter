@@ -33,16 +33,16 @@ public class TXTOutputRenderer extends AbstractOutputRenderer {
      */
     @Override
     public void addHostReport(HostReport hostReport) {
-        reportBuilder.append("\n\nHost: " + hostReport.getHost() + System.getProperty("line.seperator"));
+        reportBuilder.append("\n\nHost: " + hostReport.getHost() + System.lineSeparator());
         reportBuilder.append("Scan Type: Full Scan\n"); //Add in dynamic part when we add that feature
         ArrayList<Rule> rules = hostReport.getMatchedRules();
         for (Rule rule : rules) {
-            reportBuilder.append("Rule Name: " + rule.getName() + System.getProperty("line.seperator"));
-            reportBuilder.append("Severity: " + rule.getSeverity() + System.getProperty("line.seperator"));
-            reportBuilder.append("Description: " + rule.getDescription() + System.getProperty("line.seperator"));
+            reportBuilder.append("Rule Name: " + rule.getName() + System.lineSeparator());
+            reportBuilder.append("Severity: " + rule.getSeverity() + System.lineSeparator());
+            reportBuilder.append("Description: " + rule.getDescription() + System.lineSeparator());
         }
         //Break the report up a little
-        reportBuilder.append("--------------------------------------------\n");
+        reportBuilder.append("--------------------------------------------" + System.lineSeparator());
     }
 
     /**

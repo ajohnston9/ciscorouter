@@ -24,7 +24,7 @@ public class CSVOutputRenderer extends AbstractOutputRenderer {
     public CSVOutputRenderer(File _file) {
         super(_file);
         reportBuilder = new StringBuilder();
-        reportBuilder.append("host, scan_type, rule_name, severity, description" + System.getProperty("line.seperator"));
+        reportBuilder.append("host, scan_type, rule_name, severity, description" + System.lineSeparator());
     }
 
     /**
@@ -37,7 +37,7 @@ public class CSVOutputRenderer extends AbstractOutputRenderer {
         String stub = hostReport.getHost().toString() + ",Full Scan,";
         for (Rule rule : rules) {
             reportBuilder.append(stub + rule.getName() + "," +"," + rule.getDescription() +
-                    System.getProperty("line.seperator"));
+                    System.lineSeparator());
         }
     }
 
