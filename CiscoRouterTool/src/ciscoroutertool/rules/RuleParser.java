@@ -1,6 +1,7 @@
 package ciscoroutertool.rules;
 
 import nu.xom.*;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,12 +62,13 @@ public class RuleParser {
             for (int i = 0; i < rules.size(); i++) {
                 Element rule = rules.get(i);
                 Element sett = rule.getFirstChildElement("Parameter");
-                settings[i] = sett.getValue();
+                settings[i] = StringEscapeUtils.unescapeXml(sett.getValue());
                 
                 Element arg  = rule.getFirstChildElement("Argument");
-                params[i] = arg.getValue();
+                params[i] = StringEscapeUtils.unescapeXml(arg.getValue());
+                System.out.println("Sett: " + settings[i] + " Param: " + params[i]);
             }
-            r = new Rule(nameVal, descVal, sevVal, settings, params);
+            r = new Rule(StringEscapeUtils.unescapeXml(nameVal), StringEscapeUtils.unescapeXml(descVal), sevVal, settings, params);
         } catch (ParsingException | IOException ex) {
             Logger.getLogger(RuleParser.class.getName()).log(Level.SEVERE, null, ex);
         }
