@@ -23,6 +23,7 @@ public class SettingsManager {
 
     private String  username;
     private String  password;
+    private String  unhashedUsername;
     private boolean requiresAuth;
     
     /**
@@ -67,7 +68,7 @@ public class SettingsManager {
      * Returns the username needed to access the app
      */
     public String getUsername() {
-        return username;
+        return unhashedUsername;
     }
 
     /**
@@ -101,10 +102,11 @@ public class SettingsManager {
     public boolean checkAuth(String _username, String _password) {
         boolean isCorrectUsername = false;
         boolean isCorrectPassword = false;
-        if (username.compareTo(_username) == 0) {
-            isCorrectUsername = true;
-        }
         try {
+            if (PasswordHash.validatePassword(_username, username)) {
+                isCorrectUsername = true;
+                unhashedUsername = _username;
+            }
             if (PasswordHash.validatePassword(_password, password)) {
                isCorrectPassword = true;
             }
@@ -116,15 +118,17 @@ public class SettingsManager {
     
     public void setAuth(String _username, String _password) {
         String hashedPassword;
+        String hashedUsername;
         try {
             hashedPassword = PasswordHash.createHash(_password);
+            hashedUsername = PasswordHash.createHash(_username);
             File settingsFile = new File(System.getProperty("user.dir") + "/settings/settings.xml");
             FileWriter fw = new FileWriter(settingsFile, false);
 
             Element root = new Element("Settings");
 
             Element user = new Element("Username");
-            user.appendChild(_username);
+            user.appendChild(hashedUsername);
             root.appendChild(user);
 
             Element pass = new Element("Password");
