@@ -7,8 +7,9 @@
 package ciscoroutertool.scanner.parser;
 
 /**
- *
- * @author andrew
+ * Holds a specific setting in a config file
+ * @version 0.01ALPHA
+ * @author Andrew H. Johnston
  */
 public class RouterSetting {
     

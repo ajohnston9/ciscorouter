@@ -3,8 +3,9 @@ package ciscoroutertool.scanner.parser;
 import java.util.ArrayList;
 
 /**
- *
- * @author andrew
+ * Manages router interfaces so shutdown interfaces can be cleaned out
+ * @version 0.01ALPHA
+ * @author Andrew H. Johnston <a href="mailto:ahjohnston25@gmail.com>ahjohnston25@gmail.com</a>
  */
 public class RouterInterface extends RouterSetting{
  
