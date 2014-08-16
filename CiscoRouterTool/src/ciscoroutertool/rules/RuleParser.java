@@ -15,7 +15,11 @@ import java.util.logging.Logger;
  * @author Andrew Johnston
  */
 public class RuleParser {
-    
+
+    /**
+     * Loads rules from rules/ directory and returns them as cleaned Rule objects in an ArrayList
+     * @return an ArrayList of rules
+     */
     public static ArrayList<Rule> getRules() {
         ArrayList<Rule> rules = new ArrayList<>();
         //Get the current working directory
@@ -36,8 +40,13 @@ public class RuleParser {
         }
         return rules;
     }
-    
-    public static Rule getRuleFromFile(File f) {
+
+    /**
+     * Returns a Rule object from a given file
+     * @param f The file to load the rule from
+     * @return A Rule object
+     */
+    private static Rule getRuleFromFile(File f) {
         Rule r = null;
         try {
             Builder parser = new Builder();
@@ -66,7 +75,6 @@ public class RuleParser {
                 
                 Element arg  = rule.getFirstChildElement("Argument");
                 params[i] = StringEscapeUtils.unescapeXml(arg.getValue());
-                System.out.println("Sett: " + settings[i] + " Param: " + params[i]);
             }
             r = new Rule(StringEscapeUtils.unescapeXml(nameVal), StringEscapeUtils.unescapeXml(descVal), sevVal, settings, params);
         } catch (ParsingException | IOException ex) {

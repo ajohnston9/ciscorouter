@@ -21,9 +21,24 @@ import java.util.logging.Logger;
  */
 public class SettingsManager {
 
+    /**
+     * The username to log in to the app
+     */
     private String  username;
+
+    /**
+     * The password to log in to the app
+     */
     private String  password;
+
+    /**
+     * The unhashed version of the username (used for forms)
+     */
     private String  unhashedUsername;
+
+    /**
+     * A boolean that indicates if authentication is currently enabled.
+     */
     private boolean requiresAuth;
     
     /**
@@ -115,7 +130,12 @@ public class SettingsManager {
         }
         return (isCorrectUsername && isCorrectPassword);
     }
-    
+
+    /**
+     * Sets the username and password for authenticating to the application
+     * @param _username the username to save
+     * @param _password the password to save
+     */
     public void setAuth(String _username, String _password) {
         String hashedPassword;
         String hashedUsername;

@@ -210,7 +210,7 @@ public class OutputReview extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCSVActionPerformed
 
     private void btnTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTXTActionPerformed
-        this.genericSaveToFile("txt", OutputManager.TEXT_OUTPUT);
+        this.genericSaveToFile("txt", OutputManager.TXT_OUTPUT);
     }//GEN-LAST:event_btnTXTActionPerformed
 
     private void genericSaveToFile(String extension, int saveType) {
