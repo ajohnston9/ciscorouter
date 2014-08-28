@@ -330,10 +330,11 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         if (returnCode == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             String filename = file.getName();
+            String path     = file.getPath();
             //Make sure the filename ends in .xml
             if (!filename.matches("(.*)\\.xml$")) {
                 filename = filename + ".xml";
-                file = new File(filename);
+                file = new File(path + filename);
             }
             ConfigurationManager.saveConfiguration(file, hosts);
             JOptionPane.showMessageDialog(this, 

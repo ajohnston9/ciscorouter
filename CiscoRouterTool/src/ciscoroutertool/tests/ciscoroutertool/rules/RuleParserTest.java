@@ -11,9 +11,9 @@ public class RuleParserTest {
     public void shouldSuccessfullyParseValidRule() throws Exception {
         //TODO: Fix test so it will use only public methods
         //Use location of known test file
-        File f = new File("/home/andrew/NetBeansProjects/CiscoRuleTool/ciscorule/super-sample.xml");
+        File f = new File("/home/andrew/rules/service-password-encryption-is-not-set..xml");
         Rule r = null;
-        // = RuleParser.getRuleFromFile(f);
+        r = RuleParser.getRuleFromFile(f);
         Assert.assertNotNull("Rule returned empty object", r);
     }
 

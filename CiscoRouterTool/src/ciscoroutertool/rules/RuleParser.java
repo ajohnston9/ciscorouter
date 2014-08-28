@@ -46,7 +46,7 @@ public class RuleParser {
      * @param f The file to load the rule from
      * @return A Rule object
      */
-    private static Rule getRuleFromFile(File f) {
+    public static Rule getRuleFromFile(File f) {
         Rule r = null;
         try {
             Builder parser = new Builder();
