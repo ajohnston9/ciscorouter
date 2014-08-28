@@ -326,8 +326,9 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
      * @param evt The ActionEvent object with relevant data
      */
     private void menuSaveConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveConfigActionPerformed
-        JOptionPane.showMessageDialog(this, "Potential Security Warning",
+        JOptionPane.showMessageDialog(this,
             "This application saves router logins in clear text. Please save this file in a secure location (preferably with encryption).",
+            "Potential Security Warning",
             JOptionPane.WARNING_MESSAGE);
         int returnCode = fc.showSaveDialog(this);
         if (returnCode == JFileChooser.APPROVE_OPTION) {
