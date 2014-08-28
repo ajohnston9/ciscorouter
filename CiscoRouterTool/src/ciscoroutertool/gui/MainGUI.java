@@ -333,12 +333,11 @@ public class MainGUI  extends javax.swing.JFrame implements ScanLauncherParent {
         int returnCode = fc.showSaveDialog(this);
         if (returnCode == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            String filename = file.getName();
             String path     = file.getPath();
             //Make sure the filename ends in .xml
-            if (!filename.matches("(.*)\\.xml$")) {
-                filename = filename + ".xml";
-                file = new File(path + filename);
+            if (!path.matches("(.*)\\.xml$")) {
+                path = path + ".xml";
+                file = new File(path);
             }
             ConfigurationManager.saveConfiguration(file, hosts);
             JOptionPane.showMessageDialog(this, 
