@@ -31,3 +31,6 @@ Features:
  - More Output formats
  - Scan Profiles that allow you to scan a router will a specific subset of rules
  - More native-appearing GUI
+
+-----
+This code is licensed under the MIT license.
